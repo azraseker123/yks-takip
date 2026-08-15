@@ -17,26 +17,32 @@ module.exports = async function handler(req, res) {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
     const prompt = body?.prompt || "Merhaba";
 
-    // Doğrudan çalışan v1 sürümü ve gemini-1.5-flash adresi
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: prompt }] }]
-        })
+    // Önce gemini-2.0-flash, olmaması durumunda gemini-1.5-flash dene
+    const modelsToTry = ["gemini-2.0-flash", "gemini-1.5-flash"];
+    let lastError = "";
+
+    for (const model of modelsToTry) {
+      const response = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }]
+          })
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok && data.candidates?.[0]?.content?.parts?.[0]?.text) {
+        return res.status(200).json({ result: data.candidates[0].content.parts[0].text });
       }
-    );
 
-    const data = await response.json();
-
-    if (!response.ok) {
-      return res.status(200).json({ result: `API Hatası: ${data.error?.message || 'Bilinmeyen hata'}` });
+      lastError = data.error?.message || "Model yanıt vermedi";
     }
 
-    const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Yanıt alınamadı.";
-    return res.status(200).json({ result: resultText });
+    return res.status(200).json({ result: `API Hatası: ${lastError}` });
 
   } catch (error) {
     return res.status(200).json({ result: `Sunucu Hatası: ${error.message}` });
