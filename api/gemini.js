@@ -17,32 +17,42 @@ module.exports = async function handler(req, res) {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
     const prompt = body?.prompt || "Merhaba";
 
-    // Önce gemini-2.0-flash, olmaması durumunda gemini-1.5-flash dene
-    const modelsToTry = ["gemini-2.0-flash", "gemini-1.5-flash"];
-    let lastError = "";
+    // 1. Hesabında aktif olan modelleri sorgula
+    const listResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
+    const listData = await listResponse.json();
 
-    for (const model of modelsToTry) {
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: prompt }] }]
-          })
-        }
-      );
-
-      const data = await response.json();
-
-      if (response.ok && data.candidates?.[0]?.content?.parts?.[0]?.text) {
-        return res.status(200).json({ result: data.candidates[0].content.parts[0].text });
-      }
-
-      lastError = data.error?.message || "Model yanıt vermedi";
+    if (!listResponse.ok) {
+      return res.status(200).json({ result: `API Model Liste Hatası: ${listData.error?.message || 'Erişim reddedildi'}` });
     }
 
-    return res.status(200).json({ result: `API Hatası: ${lastError}` });
+    // generateContent destekleyen ilk modeli seç
+    const availableModels = listData.models || [];
+    const validModel = availableModels.find(m => m.supportedGenerationMethods?.includes("generateContent"));
+
+    if (!validModel) {
+      return res.status(200).json({ result: "HATA: Hesabınızda kullanılabilir geçerli bir Gemini modeli bulunamadı." });
+    }
+
+    // 2. Bulunan aktif modele isteği gönder
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/${validModel.name}:generateContent?key=${apiKey}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }]
+        })
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      return res.status(200).json({ result: `API Hatası (${validModel.name}): ${data.error?.message || 'Bilinmeyen hata'}` });
+    }
+
+    const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Yanıt alınamadı.";
+    return res.status(200).json({ result: resultText });
 
   } catch (error) {
     return res.status(200).json({ result: `Sunucu Hatası: ${error.message}` });
