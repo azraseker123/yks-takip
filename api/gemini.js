@@ -8,15 +8,15 @@ module.exports = async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
   try {
-    const apiKey = process.env.GEMINI_API_KEY;
+    // Vercel'deki olası tüm API Key değişken isimlerini kontrol et
+    const apiKey = process.env.GEMINI_API_KEY || process.env.REACT_APP_GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+
     if (!apiKey) {
-      return res.status(500).json({ error: "GEMINI_API_KEY bulunamadı." });
+      return res.status(200).json({ result: "HATA: Vercel üzerinde GEMINI_API_KEY değişkeni bulunamadı. Lütfen Vercel Environment Variables kısmını kontrol edin." });
     }
 
-    const { prompt } = req.body;
-    if (!prompt) {
-      return res.status(400).json({ error: "Prompt eksik." });
-    }
+    const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+    const prompt = body?.prompt || "Merhaba";
 
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
@@ -32,13 +32,13 @@ module.exports = async function handler(req, res) {
     const data = await response.json();
 
     if (!response.ok) {
-      return res.status(response.status).json({ error: data.error?.message || "Gemini API Hatası" });
+      return res.status(200).json({ result: `API Hatası: ${data.error?.message || 'Bilinmeyen hata'}` });
     }
 
-    const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+    const resultText = data.candidates?.[0]?.content?.parts?.[0]?.text || "Yanıt alınamadı.";
     return res.status(200).json({ result: resultText });
 
   } catch (error) {
-    return res.status(500).json({ error: error.message || "Sunucu hatası" });
+    return res.status(200).json({ result: `Sunucu Hatası: ${error.message}` });
   }
 };
