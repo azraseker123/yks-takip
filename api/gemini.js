@@ -17,7 +17,7 @@ module.exports = async function handler(req, res) {
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
     const prompt = body?.prompt || "Merhaba";
 
-    // 1. Hesabının erişebildiği aktif modelleri çek
+    // 1. Modelleri listele
     const listRes = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
     const listData = await listRes.json();
 
@@ -25,15 +25,19 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ result: `Model Liste Hatası: ${listData.error?.message || 'Erişim reddedildi'}` });
     }
 
-    // Metin üretimi (generateContent) destekleyen ilk modeli seç
+    // Pasif/kullanımdan kaldırılmış (2.0/2.5 flash vb.) olmayan aktif ilk geçerli modeli seç
     const availableModels = listData.models || [];
-    const validModel = availableModels.find(m => m.supportedGenerationMethods?.includes("generateContent"));
+    const validModel = availableModels.find(m => 
+      m.supportedGenerationMethods?.includes("generateContent") && 
+      !m.name.includes("2.5") && 
+      !m.name.includes("2.0")
+    ) || availableModels.find(m => m.supportedGenerationMethods?.includes("generateContent"));
 
     if (!validModel) {
-      return res.status(200).json({ result: "HATA: Hesabınızda metin üretebilen aktif bir Gemini modeli bulunamadı." });
+      return res.status(200).json({ result: "HATA: Aktif bir Gemini modeli bulunamadı." });
     }
 
-    // 2. Dinamik olarak bulunan modele isteği at (Örn: models/gemini-pro)
+    // 2. Seçilen modele istek gönder
     const response = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/${validModel.name}:generateContent?key=${apiKey}`,
       {
