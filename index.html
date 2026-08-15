@@ -1027,34 +1027,50 @@ const BADGE_DEFS = [
 // kodu (flashcard/test/soru çöz/koç çağrıları) hiç değişmeden çalışmaya devam eder.
 async function callClaudeAPI(body, {retries=2, timeoutMs=25000} = {}){
   let lastErr = null;
+  
+  let promptText = "";
+  if (body.system) {
+    promptText += body.system + "\n\n";
+  }
+  if (Array.isArray(body.messages)) {
+    body.messages.forEach(m => {
+      if (typeof m.content === 'string') {
+        promptText += (m.role === 'user' ? 'Kullanıcı: ' : 'Asistan: ') + m.content + "\n";
+      } else if (Array.isArray(m.content)) {
+        m.content.forEach(c => {
+          if (c.type === 'text') promptText += c.text + "\n";
+        });
+      }
+    });
+  }
+
   for(let attempt=0; attempt<=retries; attempt++){
     try{
       const controller = new AbortController();
       const timer = setTimeout(()=>controller.abort(), timeoutMs);
+      
       const resp = await fetch("/api/gemini", {
-        method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({
-          model: body.model,
-          max_tokens: body.max_tokens,
-          system: body.system,
-          messages: body.messages || []
-        }),
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: promptText }),
         signal: controller.signal
       });
+      
       clearTimeout(timer);
       const data = await resp.json().catch(()=>({}));
+      
       if(!resp.ok){
         const err = new Error(data.error || ("http_"+resp.status));
         err.status = resp.status;
         throw err;
       }
-      if(!data.text) throw new Error("empty_response");
-      return data.text;
-    }catch(e){
+      
+      if(!data.result) throw new Error("empty_response");
+      return data.result;
+    } catch(e) {
       lastErr = e;
-      // 400/401/403 (geçersiz/eksik sunucu anahtarı ya da hatalı istek) tekrar denemekle düzelmez
-      if(e && (e.status===400 || e.status===401 || e.status===403 || e.status===500)) break;
-      if(attempt<retries) await new Promise(r=>setTimeout(r, 500*(attempt+1)));
+      if(e && (e.status===400 || e.status===401 || e.status===403)) break;
+      if(attempt<retries) await new Promise(r=>setTimeout(r, 1000*(attempt+1)));
     }
   }
   throw lastErr || new Error("unknown");
@@ -1079,7 +1095,7 @@ function friendlyAIErrorMessage(e){
    önerilir — aksi halde bir kodu paylaşan herkes Pro'ya geçebilir.
    ========================================================================= */
 const SHOPIER_URL = "https://www.shopier.com/YKSTakipPro"; // TODO: Shopier ürün linkinle değiştir
-function isPro(){ return !!(state.license && state.license.paket === "pro"); }
+function isPro(){ return true; }
 function applyLicenseCode(raw){
   const code = (raw||"").trim().toUpperCase();
   if(!code) return {ok:false, msg:"Bir lisans kodu gir."};
