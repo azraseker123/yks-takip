@@ -1025,55 +1025,58 @@ const BADGE_DEFS = [
 // messages/system) — Gemini'nin generateContent biçimine çevirme işi artık
 // /api/gemini.js içinde, sunucu tarafında yapılır; bu sayede geri kalan uygulama
 // kodu (flashcard/test/soru çöz/koç çağrıları) hiç değişmeden çalışmaya devam eder.
-async function callClaudeAPI(body, {retries=2, timeoutMs=25000} = {}){
+async function callClaudeAPI(body, {retries=2, timeoutMs=25000} = {}) {
   let lastErr = null;
-  
   let promptText = "";
-  if (body.system) {
-    promptText += body.system + "\n\n";
-  }
-  if (Array.isArray(body.messages)) {
+
+  if (typeof body === "string") {
+    promptText = body;
+  } else if (body?.prompt) {
+    promptText = body.prompt;
+  } else if (Array.isArray(body?.messages)) {
     body.messages.forEach(m => {
-      if (typeof m.content === 'string') {
-        promptText += (m.role === 'user' ? 'Kullanıcı: ' : 'Asistan: ') + m.content + "\n";
-      } else if (Array.isArray(m.content)) {
-        m.content.forEach(c => {
-          if (c.type === 'text') promptText += c.text + "\n";
-        });
+      if (typeof m.content === "string") promptText += m.content + "\n";
+      else if (Array.isArray(m.content)) {
+        m.content.forEach(c => { if (c.type === "text") promptText += c.text + "\n"; });
       }
     });
+  } else {
+    promptText = JSON.stringify(body);
   }
 
-  for(let attempt=0; attempt<=retries; attempt++){
-    try{
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
       const controller = new AbortController();
-      const timer = setTimeout(()=>controller.abort(), timeoutMs);
-      
+      const timer = setTimeout(() => controller.abort(), timeoutMs);
+
       const resp = await fetch("/api/gemini", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: promptText }),
         signal: controller.signal
       });
-      
+
       clearTimeout(timer);
-      const data = await resp.json().catch(()=>({}));
-      
-      if(!resp.ok){
-        const err = new Error(data.error || ("http_"+resp.status));
-        err.status = resp.status;
-        throw err;
+      const data = await resp.json().catch(() => ({}));
+
+      if (!resp.ok) {
+        throw new Error(data.result || data.error || `HTTP ${resp.status}`);
       }
-      
-      if(!data.result) throw new Error("empty_response");
-      return data.result;
-    } catch(e) {
-      lastErr = e;
-      if(e && (e.status===400 || e.status===401 || e.status===403)) break;
-      if(attempt<retries) await new Promise(r=>setTimeout(r, 1000*(attempt+1)));
+
+      let text = data.result || "";
+
+      // Flashcard ve Test Lab verilerini bozan markdown json bloklarını temizler
+      if (typeof text === "string" && text.includes("```")) {
+        text = text.replace(/```json/g, "").replace(/```/g, "").trim();
+      }
+
+      return text;
+    } catch (err) {
+      lastErr = err;
+      if (attempt < retries) await new Promise(r => setTimeout(r, 1000));
     }
   }
-  throw lastErr || new Error("unknown");
+  throw lastErr || new Error("AI isteği başarısız oldu.");
 }
 function friendlyAIErrorMessage(e){
   if(e && e.status===500) return "Sunucu tarafında AI bağlantısı şu an kurulamıyor. Bir süre sonra tekrar dene.";
