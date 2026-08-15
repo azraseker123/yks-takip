@@ -8,18 +8,18 @@ module.exports = async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
   try {
-    // Vercel'deki olası tüm API Key değişken isimlerini kontrol et
     const apiKey = process.env.GEMINI_API_KEY || process.env.REACT_APP_GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
 
     if (!apiKey) {
-      return res.status(200).json({ result: "HATA: Vercel üzerinde GEMINI_API_KEY değişkeni bulunamadı. Lütfen Vercel Environment Variables kısmını kontrol edin." });
+      return res.status(200).json({ result: "HATA: GEMINI_API_KEY bulunamadı." });
     }
 
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
     const prompt = body?.prompt || "Merhaba";
 
+    // Doğrudan çalışan v1 sürümü ve gemini-1.5-flash adresi
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+      `https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
