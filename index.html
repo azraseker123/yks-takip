@@ -3,973 +3,111 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YKS Takip — Ultimate Secure</title>
+<title>YKS Takip — Başarı Merkezi</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{
-  --paper:#F6F5F0; --paper2:#EFEDE6; --line:#CBD3DE; --line-soft:#E3E7ED;
-  --ink:#182742; --ink-soft:#4A5A78; --ink-faint:#8996AC;
-  --red:#B8262C; --red-soft:#F3DEDD; --green:#276B4F; --green-soft:#DCEBE2;
-  --amber:#B4790F; --amber-soft:#F3E6CB; --card:#FFFFFF; --accent:#182742; --highlight:#E7B93B;
-  --radius:3px; --shadow:0 1px 0 rgba(24,39,66,0.06), 0 8px 20px -12px rgba(24,39,66,0.18);
-}
-*{box-sizing:border-box;}
-html,body{margin:0;padding:0;}
-body{
-  background:var(--paper);
-  background-image: linear-gradient(var(--line-soft) 1px, transparent 1px), linear-gradient(90deg, var(--line-soft) 1px, transparent 1px);
-  background-size:26px 26px; color:var(--ink); font-family:'IBM Plex Sans', sans-serif; min-height:100vh;
-}
-h1,h2,h3,h4{font-family:'Fraunces', serif; margin:0; color:var(--ink); font-weight:600;}
-.mono{font-family:'IBM Plex Mono', monospace;}
-button{font-family:inherit; cursor:pointer;}
-input,select,textarea{font-family:inherit;}
-#app{min-height:100vh;}
-.hidden{display:none !important;}
-
-/* AUTH & ONBOARDING (Güvenli Giriş ve KVKK) */
-#authGate{min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;}
-.auth-card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); max-width:440px; width:100%; padding:36px 32px;}
-.auth-tabs{display:flex; margin-bottom:22px; border:1px solid var(--line); border-radius:var(--radius); overflow:hidden;}
-.auth-tab{flex:1; padding:10px; text-align:center; font-size:13px; font-weight:600; background:var(--paper); color:var(--ink-soft); cursor:pointer; border:none;}
-.auth-tab.active{background:var(--ink); color:var(--paper);}
-.field{margin-bottom:16px;}
-.field label{display:block; font-size:12.5px; font-weight:600; color:var(--ink-soft); margin-bottom:7px; text-transform:uppercase;}
-.field input, .field select{width:100%; padding:11px 12px; border:1px solid var(--line); border-radius:var(--radius); background:var(--paper); font-size:15px; color:var(--ink);}
-.kvkk-box{display:flex; align-items:flex-start; gap:8px; font-size:12px; color:var(--ink-soft); margin-bottom:16px; line-height:1.4;}
-.kvkk-box input{margin-top:2px; accent-color:var(--ink);}
-.btn{border:1px solid var(--ink); background:var(--ink); color:#fff; padding:11px 20px; border-radius:var(--radius); font-size:14px; font-weight:600;}
-.btn.secondary{background:transparent; color:var(--ink);}
-.btn.small{padding:7px 12px; font-size:12.5px;}
-
-/* APP SHELL */
-#appShell{display:flex; min-height:100vh;}
-.sidebar{width:240px; flex-shrink:0; background:var(--ink); color:#EDEFF4; padding:22px 16px; position:sticky; top:0; height:100vh; display:flex; flex-direction:column;}
-.sb-brand{display:flex; align-items:center; gap:9px; margin-bottom:20px; padding:0 6px;}
-.sb-brand .dot{width:9px;height:9px;border-radius:50%;background:var(--red);}
-.sb-brand b{font-family:'Fraunces',serif; font-size:16.5px;}
-.sb-nav{display:flex; flex-direction:column; gap:2px; flex:1; overflow-y:auto;}
-.sb-item{display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:var(--radius); color:#B9C1D6; background:transparent; border:none; text-align:left; font-size:13px; font-weight:500;}
-.sb-item:hover{background:rgba(255,255,255,.06); color:#fff;}
-.sb-item.active{background:#fff; color:var(--ink); font-weight:600;}
-.main{flex:1; padding:28px 34px 60px; max-width:1180px;}
-.view{display:none;}
-.view.active{display:block;}
-.view-head{display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:22px; gap:16px; flex-wrap:wrap;}
-.view-eyebrow{font-family:'IBM Plex Mono',monospace; font-size:11px; text-transform:uppercase; color:var(--red); font-weight:600; margin-bottom:6px;}
-.view-title{font-size:26px;}
-.card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow);}
-.pad{padding:20px;}
+:root{ --paper:#F6F5F0; --ink:#182742; --ink-soft:#4A5A78; --card:#FFFFFF; --line:#CBD3DE; --red:#B8262C; --gold:#E7B93B; --radius:8px; }
+body{background:var(--paper); color:var(--ink); font-family:'IBM Plex Sans', sans-serif; margin:0;}
+.auth-card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:0 4px 20px rgba(0,0,0,0.05); padding:40px; max-width:450px; margin:100px auto;}
 .grid{display:grid; gap:16px;}
-.grid.cols-3{grid-template-columns:repeat(3,1fr);}
-.grid.cols-2{grid-template-columns:repeat(2,1fr);}
-table{width:100%; border-collapse:collapse; font-size:13.5px;}
-th{text-align:left; font-size:11px; text-transform:uppercase; color:var(--ink-faint); padding:8px 10px; border-bottom:1px solid var(--line);}
-td{padding:9px 10px; border-bottom:1px solid var(--line-soft);}
-
-/* COMPONENTS */
-.flash-wrap{max-width:520px; margin:0 auto;}
-.flashcard{background:var(--card); border:1px solid var(--line); border-radius:6px; box-shadow:var(--shadow); min-height:260px; padding:32px 28px; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; cursor:pointer; position:relative;}
-.flashcard .fc-tag{position:absolute; top:14px; left:16px; font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--ink-faint); text-transform:uppercase;}
-.flashcard .fc-text{font-size:18px; line-height:1.5; font-family:'Fraunces',serif; font-weight:500;}
-.fc-answer{color:var(--green); font-weight:600;}
-.chat-window{height:440px; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:12px; background:var(--paper);}
-.msg{max-width:80%; padding:11px 14px; border-radius:8px; font-size:14px; line-height:1.55;}
-.msg.user{align-self:flex-end; background:var(--ink); color:#fff; border-bottom-right-radius:2px;}
-.msg.ai{align-self:flex-start; background:var(--card); border:1px solid var(--line); border-bottom-left-radius:2px;}
-.chat-input-row{display:flex; gap:8px; padding:12px; border-top:1px solid var(--line);}
-.chat-input-row textarea{flex:1; resize:none; border:1px solid var(--line); border-radius:var(--radius); padding:10px 12px; font-size:14px; height:44px;}
-.drop-zone{border:1.6px dashed var(--line); border-radius:var(--radius); padding:32px 20px; text-align:center; background:var(--card); cursor:pointer;}
-.drop-preview{max-width:100%; max-height:320px; border-radius:var(--radius); border:1px solid var(--line); display:block; margin:0 auto;}
-select.plain, input.plain{padding:9px 10px; border:1px solid var(--line); border-radius:var(--radius); background:var(--paper); font-size:13.5px;}
-.empty{color:var(--ink-faint); font-size:13.5px; padding:18px 4px; text-align:center;}
-.bubble{width:20px; height:20px; border-radius:50%; border:1.6px solid var(--ink-soft); display:inline-block; background:var(--card); cursor:pointer;}
-.bubble.checked{background:var(--ink); border-color:var(--ink);}
-.bubble-row{display:flex; align-items:center; gap:12px; padding:9px 4px; border-bottom:1px dashed var(--line-soft);}
-.pill{display:inline-flex; align-items:center; gap:5px; padding:3px 9px; border-radius:20px; font-size:11.5px; font-weight:600;}
-.pill.crit{background:var(--red-soft); color:var(--red);}
-.pill.mid{background:var(--amber-soft); color:var(--amber);}
-.pill.good{background:var(--green-soft); color:var(--green);}
-.quote-card{border-left:3px solid var(--highlight); padding:16px 18px; background:var(--card); border-radius:0 var(--radius) var(--radius) 0;}
-.quote-text{font-family:'Fraunces',serif; font-size:17px; line-height:1.5; font-style:italic;}
-.countdown-card{background:var(--ink); color:#fff; border-radius:var(--radius); padding:18px 20px;}
-.countdown-card .cc-num{font-family:'IBM Plex Mono',monospace; font-size:38px; font-weight:700;}
-.badge-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:12px;}
-.badge{border:1px solid var(--line); border-radius:var(--radius); padding:14px 12px; text-align:center; background:var(--card);}
-.badge.locked{opacity:.4;}
+.card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:20px; box-shadow:0 2px 4px rgba(0,0,0,0.03);}
+.btn{background:var(--ink); color:#fff; border:none; padding:12px; width:100%; border-radius:var(--radius); font-weight:600; cursor:pointer;}
+.badge-zone{display:grid; grid-template-columns:repeat(auto-fill, minmax(120px, 1fr)); gap:15px; margin-top:20px;}
+.badge{text-align:center; padding:15px; border-radius:var(--radius); background:#fff; border:2px solid var(--line); opacity:0.5;}
+.badge.active{border-color:var(--gold); opacity:1; background:#fffdf5;}
+.badge-icon{font-size:32px; display:block; margin-bottom:8px;}
 </style>
 </head>
 <body>
 
-<div id="app">
-  <!-- AUTH GATE (Güvenli Giriş, Tekil Oturum & Pro Lisans) -->
-  <div id="authGate">
+<div id="authGate">
     <div class="auth-card">
-      <div class="view-eyebrow">YKS Takip — Güvenli Alan</div>
-      <h1 class="view-title" id="authTitle" style="font-size:24px; margin-bottom:16px;">Giriş Yap</h1>
-      
-      <div class="auth-tabs">
-        <button class="auth-tab active" id="tabLoginBtn">Giriş Yap</button>
-        <button class="auth-tab" id="tabRegisterBtn">Kayıt Ol</button>
-      </div>
-
-      <div class="field"><label>E-posta</label><input type="text" id="authEmail" placeholder="ornek@mail.com"></div>
-      <div class="field"><label>Şifre</label><input type="password" id="authPass" placeholder="Şifreniz"></div>
-      
-      <div id="registerExtraFields" class="hidden">
-        <div class="field"><label>Şifre Tekrar</label><input type="password" id="authPassConfirm" placeholder="Şifrenizi tekrar girin"></div>
-        <div class="kvkk-box">
-          <input type="checkbox" id="kvkkCheck">
-          <label for="kvkkCheck" style="display:inline; text-transform:none; font-size:11.5px; font-weight:normal;">6698 sayılı KVKK kapsamında kişisel verilerimin güvenli olarak işlenmesine onay veriyorum.</label>
+        <h1>Başarıya Hoş Geldin</h1>
+        <div style="margin:20px 0;">
+            <input type="text" id="onbName" placeholder="Adın" style="width:100%; padding:10px; margin-bottom:10px;">
+            <select id="onbField" style="width:100%; padding:10px; margin-bottom:10px;">
+                <option value="Sayısal">Sayısal</option><option value="Eşit Ağırlık">Eşit Ağırlık</option>
+            </select>
+            <input type="text" id="onbTarget" placeholder="Hedef Üniversite/Bölüm" style="width:100%; padding:10px;">
         </div>
-      </div>
-
-      <button class="btn" id="authSubmit" style="width:100%; margin-top:6px;">Giriş Yap</button>
+        <button class="btn" id="onbSubmit">Sistemi Aktif Et</button>
     </div>
-  </div>
+</div>
 
-  <!-- APP SHELL -->
-  <div id="appShell" class="hidden">
-    <div class="sidebar">
-      <div class="sb-brand"><span class="dot"></span><b>YKS Takip</b></div>
-      <div class="sb-nav">
-        <button class="sb-item active" data-view="dashboard">Ana Sayfa</button>
-        <button class="sb-item" data-view="topics">Konu Takibi</button>
-        <button class="sb-item" data-view="schedule">Haftalık Program</button>
-        <button class="sb-item" data-view="exams">Denemeler</button>
-        <button class="sb-item" data-view="questions">Soru Takibi</button>
-        <button class="sb-item" data-view="analysis">Yanlış Analizi</button>
-        <button class="sb-item" data-view="flash">Flashcard</button>
-        <button class="sb-item" data-view="testlab">Test Lab</button>
-        <button class="sb-item" data-view="photosolve">Soru Çöz</button>
-        <button class="sb-item" data-view="arsiv">Soru Defteri</button>
-        <button class="sb-item" data-view="coach">AI Koç</button>
-        <button class="sb-item" data-view="pomodoro">Pomodoro</button>
-        <button class="sb-item" data-view="motivation">Motivasyon & Rozetler</button>
-        <button class="sb-item" data-view="group">Birlikte Çalış</button>
-        <button class="sb-item" data-view="kaynak">Kaynak Takibi</button>
-        <button class="sb-item" data-view="sleep">Uyku Takibi</button>
-        <button class="sb-item" data-view="profile">Profil / Lisans</button>
-      </div>
-    </div>
-
-    <div class="main">
-      <!-- DASHBOARD -->
-      <div class="view active" id="view-dashboard">
-        <div class="view-head"><div><div class="view-eyebrow">Özet</div><h1 class="view-title" id="dashGreet">Hoş geldin</h1></div></div>
-        <div class="grid cols-3" id="dashStats" style="margin-bottom:20px;"></div>
-        <div class="card pad quote-card" id="dashQuote" style="margin-bottom:16px;"></div>
-      </div>
-
-      <!-- TOPICS -->
-      <div class="view" id="view-topics">
-        <div class="view-head"><div><div class="view-eyebrow">Müfredat</div><h1 class="view-title">Konu Takibi</h1></div></div>
-        <div style="margin-bottom:12px; display:flex; gap:8px;">
-          <button class="btn small" id="tabTyt">TYT Konuları</button>
-          <button class="btn small secondary" id="tabAyt">AYT Konuları</button>
+<div id="appShell" class="hidden" style="display:flex;">
+    <aside style="width:250px; background:var(--ink); color:#fff; height:100vh; padding:20px;">
+        <h2 style="color:#fff; margin-bottom:30px;">YKS Takip</h2>
+        <nav style="display:flex; flex-direction:column; gap:10px;">
+            <button class="btn" style="background:#444;" onclick="showView('dash')">Ana Sayfa</button>
+            <button class="btn" style="background:#444;" onclick="showView('badges')">Rozetlerim</button>
+        </nav>
+    </aside>
+    <main style="flex:1; padding:40px;">
+        <!-- ANA SAYFA -->
+        <div id="view-dash" class="view">
+            <h1 id="greetText"></h1>
+            <div class="card" style="margin-top:20px;">
+                <h3>🎯 Çalışma Önerin</h3>
+                <p id="aiAdvice" style="color:var(--ink-soft); font-style:italic;">...</p>
+            </div>
+            <div class="card" style="margin-top:20px;">
+                <h3>🔥 Motivasyon Köşesi</h3>
+                <p>"Başarı, başarısız olma ihtimalinin çok yüksek olduğunu bilerek denemeye devam etmektir."</p>
+            </div>
         </div>
-        <div class="card pad" id="topicBody"></div>
-      </div>
-
-      <!-- SCHEDULE -->
-      <div class="view" id="view-schedule">
-        <div class="view-head"><div><div class="view-eyebrow">Planlama</div><h1 class="view-title">Haftalık Çalışma Programı</h1></div></div>
-        <div class="card pad" style="margin-bottom:16px;">
-          <div class="grid cols-3">
-            <div class="field"><label>Gün</label><select class="plain" id="schDay"><option>Pazartesi</option><option>Salı</option><option>Çarşamba</option><option>Perşembe</option><option>Cuma</option><option>Cumartesi</option><option>Pazar</option></select></div>
-            <div class="field"><label>Ders</label><input class="plain" type="text" id="schDers" placeholder="Örn. Matematik"></div>
-            <div class="field" style="align-self:end;"><button class="btn" id="schAdd" style="width:100%;">Ekle</button></div>
-          </div>
+        <!-- ROZETLER -->
+        <div id="view-badges" class="view hidden">
+            <h1>Rozet Koleksiyonu</h1>
+            <div class="badge-zone" id="badgeContainer"></div>
         </div>
-        <div class="card pad" id="schList"></div>
-      </div>
-
-      <!-- EXAMS -->
-      <div class="view" id="view-exams">
-        <div class="view-head">
-          <div><div class="view-eyebrow">Performans</div><h1 class="view-title">Denemeler</h1></div>
-          <button class="btn small" id="newExamBtn">+ Deneme Ekle</button>
-        </div>
-        <div class="card pad">
-          <table id="examTable"><thead><tr><th>Deneme</th><th>Tarih</th><th>Tür</th><th>Net</th></tr></thead><tbody></tbody></table>
-        </div>
-      </div>
-
-      <!-- QUESTIONS -->
-      <div class="view" id="view-questions">
-        <div class="view-head"><div><div class="view-eyebrow">Soru Takibi</div><h1 class="view-title">Konu Bazlı Soru Sonuçları</h1></div></div>
-        <div class="card pad" style="margin-bottom:16px;">
-          <div class="grid cols-3">
-            <div class="field"><label>Ders</label><input class="plain" type="text" id="qDers" placeholder="Matematik"></div>
-            <div class="field"><label>Konu</label><input class="plain" type="text" id="qKonu" placeholder="Temel Kavramlar"></div>
-            <div class="field"><label>Doğru / Yanlış</label><div style="display:flex;gap:4px;"><input class="plain" type="number" id="qD" placeholder="D" style="width:50%"><input class="plain" type="number" id="qY" placeholder="Y" style="width:50%"></div></div>
-          </div>
-          <button class="btn" id="qSave" style="margin-top:10px;">Kaydet</button>
-        </div>
-        <div class="card pad" id="qList"></div>
-      </div>
-
-      <!-- ANALYSIS -->
-      <div class="view" id="view-analysis">
-        <div class="view-head"><div><div class="view-eyebrow">Analiz</div><h1 class="view-title">Yanlış Analizi</h1></div></div>
-        <div class="card pad" id="analysisBody"></div>
-      </div>
-
-      <!-- FLASHCARD -->
-      <div class="view" id="view-flash">
-        <div class="view-head"><div><div class="view-eyebrow">Yapay Zeka</div><h1 class="view-title">Flashcard</h1></div></div>
-        <div class="grid cols-3" style="margin-bottom:16px;">
-          <select class="plain" id="fcExamType"><option value="TYT">TYT</option><option value="AYT">AYT</option></select>
-          <select class="plain" id="fcDers"></select>
-          <select class="plain" id="fcKonu"></select>
-        </div>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-          <span id="fcCount" class="mono">0 kart</span>
-          <button class="btn small" id="fcGenAI">✦ AI ile Kart Üret</button>
-        </div>
-        <div class="flash-wrap">
-          <div class="flashcard" id="flashCard">
-            <span class="fc-tag">soru</span>
-            <div class="fc-text" id="fcText">AI ile kart üretmek için ders ve konu seç.</div>
-            <span class="fc-hint">kartın üstüne tıkla</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- TEST LAB -->
-      <div class="view" id="view-testlab">
-        <div class="view-head"><div><div class="view-eyebrow">Yapay Zeka</div><h1 class="view-title">Test Lab</h1></div></div>
-        <div class="card pad">
-          <div class="grid cols-3">
-            <select class="plain" id="tlExamType"><option value="TYT">TYT</option><option value="AYT">AYT</option></select>
-            <select class="plain" id="tlDers"></select>
-            <select class="plain" id="tlKonu"></select>
-          </div>
-          <button class="btn" id="tlStart" style="margin-top:14px;">✦ AI Testi Oluştur</button>
-        </div>
-        <div id="testlabRunner" style="margin-top:18px;"></div>
-      </div>
-
-      <!-- PHOTO SOLVE -->
-      <div class="view" id="view-photosolve">
-        <div class="view-head"><div><div class="view-eyebrow">Yapay Zeka</div><h1 class="view-title">Soru Çöz</h1></div></div>
-        <div class="card pad">
-          <div class="drop-zone" id="psDropZone">
-            <input type="file" id="psFile" accept="image/*" style="display:none;">
-            <div id="psPlaceholder">📷 Fotoğraf seçmek için tıkla</div>
-            <img id="psPreview" class="drop-preview hidden">
-          </div>
-          <button class="btn" id="psSolve" style="width:100%; margin-top:14px;" disabled>Soruyu Çöz</button>
-        </div>
-        <div id="psResult" style="margin-top:16px;"></div>
-      </div>
-
-      <!-- ARSIV -->
-      <div class="view" id="view-arsiv">
-        <div class="view-head"><div><div class="view-eyebrow">Arşiv</div><h1 class="view-title">Soru Defteri</h1></div></div>
-        <div class="card pad" id="arsivList"></div>
-      </div>
-
-      <!-- COACH -->
-      <div class="view" id="view-coach">
-        <div class="view-head"><div><div class="view-eyebrow">Yapay Zeka</div><h1 class="view-title">AI Koç</h1></div></div>
-        <div class="card" style="overflow:hidden;">
-          <div class="chat-window" id="chatWindow"></div>
-          <div class="chat-input-row">
-            <textarea id="chatInput" placeholder="Koça soru sor..."></textarea>
-            <button class="btn" id="chatSend">Gönder</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- POMODORO -->
-      <div class="view" id="view-pomodoro">
-        <div class="view-head"><div><div class="view-eyebrow">Odak</div><h1 class="view-title">Pomodoro</h1></div></div>
-        <div class="card pad" style="text-align:center;">
-          <div class="mono" id="pomoDisplay" style="font-size:48px; font-weight:700; margin:20px 0;">25:00</div>
-          <button class="btn" id="pomoToggle">Başlat</button>
-        </div>
-      </div>
-
-      <!-- MOTIVATION -->
-      <div class="view" id="view-motivation">
-        <div class="view-head"><div><div class="view-eyebrow">Motivasyon</div><h1 class="view-title">Motivasyon & Rozetler</h1></div></div>
-        <div class="countdown-card" style="margin-bottom:16px;">
-          <div style="font-size:12px; opacity:0.8;">YKS'ye Kalan Tahmini Süre</div>
-          <div class="cc-num" id="yksDays">--</div>
-          <div style="font-size:12px; opacity:0.8;">Gün</div>
-        </div>
-        <div class="badge-grid" id="badgeGrid"></div>
-      </div>
-
-      <!-- GROUP STUDY -->
-      <div class="view" id="view-group">
-        <div class="view-head"><div><div class="view-eyebrow">Sosyal</div><h1 class="view-title">Birlikte Çalış & Liderlik</h1></div></div>
-        <div class="card pad">
-          <h3 style="margin-bottom:10px; font-size:15px;">Arkadaşını Davet Et</h3>
-          <div style="display:flex; gap:8px;">
-            <input class="plain" type="text" id="groupLink" readonly style="flex:1;">
-            <button class="btn small" id="groupCopy">Kopyala</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- KAYNAK -->
-      <div class="view" id="view-kaynak">
-        <div class="view-head"><div><div class="view-eyebrow">Kaynak</div><h1 class="view-title">Kaynak Takibi</h1></div></div>
-        <div class="card pad">
-          <div class="field"><label>Kaynak Adı</label><input class="plain" type="text" id="kName" placeholder="Örn. 345 Matematik"></div>
-          <button class="btn" id="kAdd">Kaynak Ekle</button>
-        </div>
-        <div class="card pad" id="kList" style="margin-top:16px;"></div>
-      </div>
-
-      <!-- SLEEP -->
-      <div class="view" id="view-sleep">
-        <div class="view-head"><div><div class="view-eyebrow">Dinlenme</div><h1 class="view-title">Uyku Takibi</h1></div></div>
-        <div class="card pad">
-          <div class="field"><label>Uyku Süresi (Saat)</label><input class="plain" type="number" id="sHours" placeholder="7.5"></div>
-          <button class="btn" id="sAdd">Kaydet</button>
-        </div>
-        <div class="card pad" id="sList" style="margin-top:16px;"></div>
-      </div>
-
-      <!-- PROFILE & PRO LICENSE (Tek Kullanımlık Kod Sistemi) -->
-      <div class="view" id="view-profile">
-        <div class="view-head"><div><div class="view-eyebrow">Güvenlik & Lisans</div><h1 class="view-title">Profil & AI Pro Aktivasyonu</h1></div></div>
-        <div class="card pad" style="max-width:500px; margin-bottom:16px;">
-          <div class="field"><label>İsim</label><input class="plain" type="text" id="pName"></div>
-          <button class="btn" id="pSave" style="width:100%;">Kaydet</button>
-        </div>
-        
-        <div class="card pad" style="max-width:500px; border-left:4px solid var(--amber);">
-          <h3 style="margin-bottom:8px; font-size:16px;">AI Pro Lisans Durumu</h3>
-          <p id="proStatusText" style="font-size:13px; color:var(--ink-soft); margin-bottom:12px;">Durum: Standart (Temel Paket)</p>
-          <div class="field" id="proCodeField">
-            <label>Tek Kullanımlık Pro Kodunuz</label>
-            <input class="plain" type="text" id="proInputCode" placeholder="YKS-PRO-XXXX-YYYY">
-          </div>
-          <button class="btn" id="proActivateBtn" style="width:100%;">Kodu Aktif Et</button>
-        </div>
-      </div>
-
-    </div>
-  </div>
+    </main>
 </div>
 
 <script>
-const TOPIC_DATA = {
-  TYT: {
-    "Türkçe": ["Sözcükte Anlam","Söz Yorumu","Cümlede Anlam","Paragrafta Anlam","Paragrafta Yapı","Ses Bilgisi","Yazım Kuralları","Noktalama İşaretleri","Sözcükte Yapı","İsim","Sıfat","Zamir","Zarf","Edat-Bağlaç-Ünlem","Fiil","Fiilimsi","Cümlenin Ögeleri","Cümle Türleri","Anlatım Bozukluğu"],
-    "Matematik": ["Temel Kavramlar","Sayı Basamakları","Bölme-Bölünebilme","EBOB-EKOK","Rasyonel Sayılar","Basit Eşitsizlikler","Mutlak Değer","Üslü Sayılar","Köklü Sayılar","Çarpanlara Ayırma","Oran-Orantı","Denklem Çözme","Problemler","Kümeler","Mantık","Fonksiyonlar","Polinomlar","Permütasyon-Kombinasyon","Olasılık","İstatistik"],
-    "Geometri": ["Doğruda Açılar","Üçgende Açılar","Üçgende Uzunluk","Üçgende Alan","Benzerlik","Açıortay-Kenarortay","Çokgenler","Dörtgenler","Çember ve Daire","Analitik Geometri","Katı Cisimler"],
-    "Fizik": ["Fizik Bilimine Giriş","Madde ve Özellikleri","Basınç","Kaldırma Kuvveti","Isı ve Sıcaklık","Hareket ve Kuvvet","İş, Güç ve Enerji","Elektrostatik","Elektrik Akımı","Manyetizma","Dalgalar","Optik"],
-    "Kimya": ["Kimya Bilimi","Atom ve Periyodik Sistem","Kimyasal Türler Arası Etkileşimler","Maddenin Halleri","Kimyanın Temel Kanunları","Mol Kavramı","Kimyasal Tepkimeler","Karışımlar","Asit, Baz ve Tuz"],
-    "Biyoloji": ["Canlıların Ortak Özellikleri","Temel Bileşenler","Hücre","Madde Geçişleri","Sınıflandırma","Mitoz ve Eşeysiz Üreme","Mayoz ve Eşeyli Üreme","Kalıtım","Ekosistem"]
-  },
-  AYT: {
-    "Matematik": ["Fonksiyonlar (İleri)","Polinomlar (İleri)","2. Dereceden Denklemler","Karmaşık Sayılar","Eşitsizlikler","Parabol","Trigonometri","Logaritma","Diziler","Limit","Türev","İntegral"],
-    "Geometri": ["Analitik Geometri (Doğru/Çember)","Vektörler","Uzay Geometri","Dönüşümler"],
-    "Fizik": ["Vektörler","Kuvvet ve Denge","Newton Yasaları","Bağıl Hareket","Momentum","Enerji","Elektrik Alan ve Potansiyel","Manyetik Alan","İndüksiyon","Çembersel Hareket","Basit Harmonik Hareket","Dalga Mekaniği","Atom Fiziği","Modern Fizik"],
-    "Kimya": ["Kimyasal Hesaplamalar","Gazlar","Sıvı Çözeltiler","Enerji","Hız","Denge","Asit-Baz Dengesi","Elektrokimya","Organik Kimya"],
-    "Biyoloji": ["Sinir Sistemi","Duyu Organları","Endokrin Sistem","Destek ve Hareket","Sindirim","Dolaşım","Solunum","Boşaltım","Üreme","Genden Proteine","Fotosentez","Solunum"]
-  }
+let profile = JSON.parse(localStorage.getItem("profile"));
+
+function showView(id){
+    document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+    document.getElementById('view-'+id).classList.remove('hidden');
+}
+
+document.getElementById("onbSubmit").onclick = () => {
+    profile = { 
+        name: document.getElementById("onbName").value,
+        field: document.getElementById("onbField").value,
+        target: document.getElementById("onbTarget").value
+    };
+    localStorage.setItem("profile", JSON.stringify(profile));
+    initApp();
 };
-
-let state = {
-  profile: { isim: "Öğrenci", gunlukSaat: 4, isPro: false },
-  topics: {},
-  denemeler: [],
-  sorular: [],
-  customCards: {},
-  chatHistory: [],
-  arsiv: [],
-  kaynaklar: [],
-  uyku: [],
-  schedule: {}
-};
-
-// SİSTEM GÜVENLİĞİ: Tarayıcı/Cihaz Kimliği ve Tekil Oturum (Çift Cihaz Engeli)
-let currentDeviceToken = localStorage.getItem("yks_device_token");
-if(!currentDeviceToken){
-  currentDeviceToken = Math.random().toString(36).substring(2) + Date.now().toString(36);
-  localStorage.setItem("yks_device_token", currentDeviceToken);
-}
-
-function loadState(){
-  try{
-    const saved = localStorage.getItem("yks_takip_ultimate_state");
-    if(saved) state = JSON.parse(saved);
-  }catch(e){}
-}
-function saveState(){
-  localStorage.setItem("yks_takip_ultimate_state", JSON.stringify(state));
-}
-
-async function callClaudeAPI(promptText) {
-  const resp = await fetch("/api/gemini", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ prompt: promptText })
-  });
-  const data = await resp.json().catch(() => ({}));
-  if (!resp.ok) throw new Error(data.result || data.error || `HTTP ${resp.status}`);
-  let text = data.result || "";
-  if (typeof text === "string" && text.includes("```")) {
-    text = text.replace(/```json/gi, "").replace(/```/g, "").trim();
-  }
-  return text;
-}
-
-function extractJSON(text) {
-  try { return JSON.parse(text.trim()); } catch(e) {}
-  const cleaned = text.replace(/```json/gi,"").replace(/```/g,"").trim();
-  try { return JSON.parse(cleaned); } catch(e) {}
-  const arrMatch = cleaned.match(/\[[\s\S]*\]/);
-  if(arrMatch){ try{ return JSON.parse(arrMatch[0]); }catch(e){} }
-  const objMatch = cleaned.match(/\{[\s\S]*\}/);
-  if(objMatch){ try{ return JSON.parse(objMatch[0]); }catch(e){} }
-  throw new Error("json_parse_failed");
-}
-
-// Auth Sekme Kontrolü (Giriş Yap / Kayıt Ol)
-let isRegisterMode = false;
-document.getElementById("tabLoginBtn").addEventListener("click", ()=>{
-  isRegisterMode = false;
-  document.getElementById("tabLoginBtn").classList.add("active");
-  document.getElementById("tabRegisterBtn").classList.remove("active");
-  document.getElementById("authTitle").textContent = "Giriş Yap";
-  document.getElementById("authSubmit").textContent = "Giriş Yap";
-  document.getElementById("registerExtraFields").classList.add("hidden");
-});
-document.getElementById("tabRegisterBtn").addEventListener("click", ()=>{
-  isRegisterMode = true;
-  document.getElementById("tabRegisterBtn").classList.add("active");
-  document.getElementById("tabLoginBtn").classList.remove("active");
-  document.getElementById("authTitle").textContent = "Kayıt Ol";
-  document.getElementById("authSubmit").textContent = "Hesap Oluştur";
-  document.getElementById("registerExtraFields").classList.remove("hidden");
-});
-
-document.getElementById("authSubmit").addEventListener("click", ()=>{
-  const email = document.getElementById("authEmail").value.trim().toLowerCase();
-  const pass = document.getElementById("authPass").value.trim();
-  if(!email || !pass){ alert("Lütfen e-posta ve şifre alanlarını doldurun."); return; }
-  
-  let registeredUsers = JSON.parse(localStorage.getItem("yks_secure_users") || "{}");
-
-  if(isRegisterMode){
-    const passConfirm = document.getElementById("authPassConfirm").value.trim();
-    const kvkk = document.getElementById("kvkkCheck").checked;
-    if(pass !== passConfirm){ alert("Şifreler birbiriyle uyuşmuyor."); return; }
-    if(!kvkk){ alert("Lütfen KVKK onay kutusunu işaretleyin."); return; }
-    if(registeredUsers[email]){ alert("Bu e-posta ile zaten bir hesap var."); return; }
-
-    registeredUsers[email] = { pass, activeDevice: currentDeviceToken };
-    localStorage.setItem("yks_secure_users", JSON.stringify(registeredUsers));
-    alert("Kayıt başarıyla oluşturuldu! Şimdi giriş yapabilirsiniz.");
-    document.getElementById("tabLoginBtn").click();
-    return;
-  }
-
-  // GİRİŞ KONTROLÜ VE TEKİL OTURUM / ÇİFT CİHAZ ENGELİ
-  const userRecord = registeredUsers[email];
-  if(!userRecord || userRecord.pass !== pass){
-    alert("Hatalı e-posta veya şifre!");
-    return;
-  }
-
-  // Eğer başka bir cihazda açık oturum varsa ve bu cihaz o değilse engelle
-  if(userRecord.activeDevice && userRecord.activeDevice !== currentDeviceToken){
-    alert("Güvenlik Uyarısı: Bu hesap başka bir cihazda/tarayıcıda açık! Aynı anda çift cihazda kullanılamaz.");
-    return;
-  }
-
-  // Oturumu bu cihaza sabitle
-  userRecord.activeDevice = currentDeviceToken;
-  localStorage.setItem("yks_secure_users", JSON.stringify(registeredUsers));
-
-  loadState();
-  document.getElementById("authGate").classList.add("hidden");
-  document.getElementById("appShell").classList.remove("hidden");
-  initApp();
-});
-
-document.querySelectorAll(".sb-item").forEach(btn=>{
-  btn.addEventListener("click", ()=>{
-    document.querySelectorAll(".sb-item").forEach(b=>b.classList.remove("active"));
-    btn.classList.add("active");
-    document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
-    document.getElementById("view-"+btn.dataset.view).classList.add("active");
-    renderViews();
-  });
-});
-
-let activeTopicTab = "TYT";
-document.getElementById("tabTyt").addEventListener("click", ()=>{ activeTopicTab="TYT"; document.getElementById("tabTyt").className="btn small"; document.getElementById("tabAyt").className="btn small secondary"; renderTopics(); });
-document.getElementById("tabAyt").addEventListener("click", ()=>{ activeTopicTab="AYT"; document.getElementById("tabAyt").className="btn small"; document.getElementById("tabTyt").className="btn small secondary"; renderTopics(); });
 
 function initApp(){
-  fillDersSelect("fcExamType","fcDers","fcKonu");
-  fillDersSelect("tlExamType","tlDers","tlKonu");
-  
-  document.getElementById("fcExamType").addEventListener("change", ()=>fillDersSelect("fcExamType","fcDers","fcKonu"));
-  document.getElementById("fcDers").addEventListener("change", ()=>fillKonuSelect("fcExamType","fcDers","fcKonu"));
-  document.getElementById("fcKonu").addEventListener("change", renderFlashcard);
-  
-  document.getElementById("tlExamType").addEventListener("change", ()=>fillDersSelect("tlExamType","tlDers","tlKonu"));
-  document.getElementById("tlDers").addEventListener("change", ()=>fillKonuSelect("tlExamType","tlDers","tlKonu"));
-
-  document.getElementById("pName").value = state.profile.isim;
-  document.getElementById("pSave").addEventListener("click", ()=>{
-    state.profile.isim = document.getElementById("pName").value.trim() || "Öğrenci";
-    saveState();
-    alert("Kaydedildi!");
-  });
-
-  // TEK KULLANIMLIK PRO LİSANS SİSTEMİ
-  updateProUI();
-  document.getElementById("proActivateBtn").addEventListener("click", ()=>{
-    const code = document.getElementById("proInputCode").value.trim().toUpperCase();
-    let usedCodes = JSON.parse(localStorage.getItem("yks_used_pro_codes") || "[]");
-
-    // Geçerli örnek Pro kod havuzu (veya tek seferlik üretilen şifreli anahtarlar)
-    const validPool = ["YKS-PRO-A1B2-C3D4", "YKS-PRO-X9Y8-Z7W6", "YKS-PRO-TEST-2026"];
-
-    if(!validPool.includes(code)){
-      alert("Geçersiz lisans kodu!");
-      return;
-    }
-    if(usedCodes.includes(code)){
-      alert("Güvenlik Hatası: Bu lisans kodu daha önce başka bir kullanıcı tarafından kullanılmış! Tekrar kullanılamaz.");
-      return;
-    }
-
-    // Kodu tüket ve kilitle
-    usedCodes.push(code);
-    localStorage.setItem("yks_used_pro_codes", JSON.stringify(usedCodes));
-
-    state.profile.isPro = true;
-    saveState();
-    updateProUI();
-    alert("Tebrikler! AI Pro Paket hesabınıza başarıyla tanımlandı.");
-  });
-
-  setupGroupShare();
-  renderViews();
-  initPomodoro();
-  initMotivation();
+    document.getElementById("authGate").classList.add("hidden");
+    document.getElementById("appShell").classList.remove("hidden");
+    document.getElementById("greetText").textContent = "Merhaba " + profile.name + ", tekrar hoş geldin!";
+    document.getElementById("aiAdvice").textContent = profile.field === "Sayısal" ? 
+        "Bugün Mat-2 integral soru çözümü ve Fizik optik tekrarı için harika bir gün!" : 
+        "Bugün Türkçe paragraf ve Tarih soru bankası önceliğinde ilerlemeni öneririm.";
+    
+    renderBadges();
 }
 
-function updateProUI(){
-  const statusTxt = document.getElementById("proStatusText");
-  const fieldBox = document.getElementById("proCodeField");
-  const btn = document.getElementById("proActivateBtn");
-  if(state.profile.isPro){
-    statusTxt.textContent = "Durum: Aktif (AI Pro Sınırsız Paket 🚀)";
-    statusTxt.style.color = "var(--green)";
-    fieldBox.style.display = "none";
-    btn.style.display = "none";
-  } else {
-    statusTxt.textContent = "Durum: Standart (Temel Paket)";
-    statusTxt.style.color = "var(--ink-soft)";
-  }
+function renderBadges(){
+    const badges = [
+        {icon: "🚀", title: "İlk Adım", active: true},
+        {icon: "📚", title: "Soru Avcısı", active: false},
+        {icon: "🏆", title: "Deneme Kurdu", active: false}
+    ];
+    document.getElementById("badgeContainer").innerHTML = badges.map(b => `
+        <div class="badge ${b.active ? 'active' : ''}">
+            <span class="badge-icon">${b.icon}</span>
+            <div style="font-weight:600;">${b.title}</div>
+        </div>
+    `).join('');
 }
 
-function fillDersSelect(examSelId, dersSelId, konuSelId){
-  const examType = document.getElementById(examSelId).value;
-  const dersSel = document.getElementById(dersSelId);
-  dersSel.innerHTML = "";
-  Object.keys(TOPIC_DATA[examType]||{}).forEach(d=>{
-    const o=document.createElement("option"); o.value=d; o.textContent=d; dersSel.appendChild(o);
-  });
-  fillKonuSelect(examSelId, dersSelId, konuSelId);
-}
-
-function fillKonuSelect(examSelId, dersSelId, konuSelId){
-  const examType = document.getElementById(examSelId).value;
-  const ders = document.getElementById(dersSelId).value;
-  const konuSel = document.getElementById(konuSelId);
-  konuSel.innerHTML = "";
-  ((TOPIC_DATA[examType] && TOPIC_DATA[examType][ders]) || []).forEach(k=>{
-    const o=document.createElement("option"); o.value=k; o.textContent=k; konuSel.appendChild(o);
-  });
-  if(konuSelId==="fcKonu") renderFlashcard();
-}
-
-function renderViews(){
-  renderDashboard();
-  renderTopics();
-  renderExams();
-  renderFlashcard();
-  renderQuestions();
-  renderAnalysis();
-  renderArsiv();
-  renderKaynak();
-  renderSleep();
-  renderSchedule();
-}
-
-// DASHBOARD
-function renderDashboard(){
-  document.getElementById("dashGreet").textContent = `Hoş geldin, ${state.profile.isim}`;
-  document.getElementById("dashStats").innerHTML = `
-    <div class="card pad"><div style="font-size:12px;color:var(--ink-faint);">Kayıtlı Deneme</div><div style="font-size:24px;font-weight:700;">${state.denemeler.length}</div></div>
-    <div class="card pad"><div style="font-size:12px;color:var(--ink-faint);">Soru Takibi</div><div style="font-size:24px;font-weight:700;">${state.sorular.length} Kayıt</div></div>
-    <div class="card pad"><div style="font-size:12px;color:var(--ink-faint);">Çalışma Hedefi</div><div style="font-size:24px;font-weight:700;">${state.profile.gunlukSaat} Saat</div></div>
-  `;
-  document.getElementById("dashQuote").innerHTML = `<div class="quote-text">"Bugün çözdüğün her soru, sınav günü bir saniye daha az tereddüt etmen demek."</div><div style="font-size:12px; color:var(--ink-soft); margin-top:8px;">— YKS Takip</div>`;
-}
-
-// TOPICS
-function renderTopics(){
-  const wrap = document.getElementById("topicBody");
-  const dersler = TOPIC_DATA[activeTopicTab];
-  wrap.innerHTML = Object.keys(dersler).map(ders => `
-    <div style="margin-bottom:16px;">
-      <h3 style="font-size:15px; margin-bottom:6px; color:var(--red);">${ders}</h3>
-      ${dersler[ders].map(konu => {
-        const key = `${activeTopicTab}|${ders}|${konu}`;
-        const checked = !!state.topics[key];
-        return `<div class="bubble-row">
-          <span class="bubble ${checked?'checked':''}" data-key="${key}"></span>
-          <span>${konu}</span>
-        </div>`;
-      }).join("")}
-    </div>
-  `).join("");
-
-  wrap.querySelectorAll(".bubble").forEach(b => {
-    b.addEventListener("click", ()=>{
-      const k = b.dataset.key;
-      state.topics[k] = !state.topics[k];
-      saveState();
-      renderTopics();
-    });
-  });
-}
-
-// SCHEDULE
-document.getElementById("schAdd").addEventListener("click", ()=>{
-  const day = document.getElementById("schDay").value;
-  const ders = document.getElementById("schDers").value.trim();
-  if(!ders) return;
-  if(!state.schedule[day]) state.schedule[day] = [];
-  state.schedule[day].push(ders);
-  saveState();
-  document.getElementById("schDers").value = "";
-  renderSchedule();
-});
-function renderSchedule(){
-  const wrap = document.getElementById("schList");
-  const days = ["Pazartesi","Salı","Çarşamba","Perşembe","Cuma","Cumartesi","Pazar"];
-  wrap.innerHTML = days.map(d => `
-    <div style="margin-bottom:10px;"><b>${d}:</b> ${(state.schedule[d]||[]).join(", ") || "Plan yok"}</div>
-  `).join("");
-}
-
-// EXAMS
-document.getElementById("newExamBtn").addEventListener("click", ()=>{
-  const ad = prompt("Deneme adı (örn. TYT 1):");
-  if(!ad) return;
-  const net = prompt("Toplam Net:");
-  if(!net) return;
-  state.denemeler.push({ id: Math.random(), ad, tarih: new Date().toLocaleDateString(), tur: "TYT", net });
-  saveState();
-  renderExams();
-  renderDashboard();
-});
-
-function renderExams(){
-  const tbody = document.querySelector("#examTable tbody");
-  tbody.innerHTML = state.denemeler.length ? state.denemeler.map(e => `
-    <tr><td>${e.ad}</td><td>${e.tarih}</td><td>${e.tur}</td><td>${e.net}</td></tr>
-  `).join("") : `<tr><td colspan="4" class="empty">Henüz deneme eklenmedi.</td></tr>`;
-}
-
-// QUESTIONS & ANALYSIS
-document.getElementById("qSave").addEventListener("click", ()=>{
-  const ders = document.getElementById("qDers").value.trim();
-  const konu = document.getElementById("qKonu").value.trim();
-  const d = parseInt(document.getElementById("qD").value) || 0;
-  const y = parseInt(document.getElementById("qY").value) || 0;
-  if(!ders || !konu) return;
-  state.sorular.push({ ders, konu, d, y });
-  saveState();
-  document.getElementById("qDers").value = ""; document.getElementById("qKonu").value = "";
-  document.getElementById("qD").value = ""; document.getElementById("qY").value = "";
-  renderQuestions();
-  renderAnalysis();
-});
-
-function renderQuestions(){
-  const wrap = document.getElementById("qList");
-  wrap.innerHTML = state.sorular.length ? state.sorular.map(q => `
-    <div style="padding:6px 0; border-bottom:1px dashed var(--line-soft);"><b>${q.ders}</b> - ${q.konu} | Doğru: ${q.d}, Yanlış: ${q.y}</div>
-  `).join("") : `<div class="empty">Kayıt yok.</div>`;
-}
-
-function renderAnalysis(){
-  const wrap = document.getElementById("analysisBody");
-  if(!state.sorular.length){ wrap.innerHTML = `<div class="empty">Veri yok.</div>`; return; }
-  wrap.innerHTML = `<table><thead><tr><th>Ders - Konu</th><th>Yanlış</th><th>Durum</th></tr></thead><tbody>` +
-    state.sorular.map(q => {
-      const total = q.d + q.y;
-      const oran = total ? Math.round((q.y / total) * 100) : 0;
-      const pill = oran > 30 ? '<span class="pill crit">Kritik</span>' : oran > 15 ? '<span class="pill mid">Orta</span>' : '<span class="pill good">İyi</span>';
-      return `<tr><td>${q.ders} - ${q.konu}</td><td>${q.y}</td><td>${pill}</td></tr>`;
-    }).join("") + `</tbody></table>`;
-}
-
-// FLASHCARD
-let fcIndex = 0, fcShowingAnswer = false;
-function renderFlashcard(){
-  fcIndex = 0; fcShowingAnswer = false;
-  const examType = document.getElementById("fcExamType").value;
-  const ders = document.getElementById("fcDers").value;
-  const konu = document.getElementById("fcKonu").value;
-  const key = `${examType}|${ders}|${konu}`;
-  const cards = state.customCards[key] || [];
-  document.getElementById("fcCount").textContent = cards.length + " kart";
-  drawFlashcard();
-}
-
-function drawFlashcard(){
-  const examType = document.getElementById("fcExamType").value;
-  const ders = document.getElementById("fcDers").value;
-  const konu = document.getElementById("fcKonu").value;
-  const key = `${examType}|${ders}|${konu}`;
-  const cards = state.customCards[key] || [];
-  const el = document.getElementById("fcText");
-  const tag = document.querySelector(".fc-tag");
-  if(!cards.length){
-    el.innerHTML = "Bu konu için henüz AI kartı üretilmedi. '✦ AI ile Kart Üret' butonuna bas.";
-    tag.textContent = "bilgi";
-    return;
-  }
-  if(fcIndex>=cards.length) fcIndex=0;
-  const c = cards[fcIndex];
-  tag.textContent = fcShowingAnswer? "cevap" : `soru ${fcIndex+1}/${cards.length}`;
-  el.innerHTML = fcShowingAnswer? `<span class="fc-answer">${c.a}</span>` : c.q;
-}
-
-document.getElementById("flashCard").addEventListener("click", ()=>{
-  fcShowingAnswer = !fcShowingAnswer; drawFlashcard();
-});
-
-document.getElementById("fcGenAI").addEventListener("click", async ()=>{
-  const examType = document.getElementById("fcExamType").value;
-  const ders = document.getElementById("fcDers").value;
-  const konu = document.getElementById("fcKonu").value;
-  const key = `${examType}|${ders}|${konu}`;
-  const btn = document.getElementById("fcGenAI");
-  btn.textContent = "Üretiliyor..."; btn.disabled = true;
-
-  const prompt = `YKS ${examType} sınavı, ${ders} dersi, ${konu} konusu için tam 5 adet kaliteli flashcard üret. Yanıtı YALNIZCA JSON formatında ver: [{"q": "soru", "a": "cevap"}]`;
-  try {
-    const text = await callClaudeAPI(prompt);
-    const parsed = extractJSON(text);
-    state.customCards[key] = parsed;
-    saveState();
-    renderFlashcard();
-  } catch(e) {
-    alert("Üretilemedi: " + e.message);
-  } finally {
-    btn.textContent = "✦ AI ile Kart Üret"; btn.disabled = false;
-  }
-});
-
-// TEST LAB
-document.getElementById("tlStart").addEventListener("click", async ()=>{
-  const examType = document.getElementById("tlExamType").value;
-  const ders = document.getElementById("tlDers").value;
-  const konu = document.getElementById("tlKonu").value;
-  const runner = document.getElementById("testlabRunner");
-  runner.innerHTML = `<div class="card pad empty">✦ AI soruları hazırlıyor...</div>`;
-
-  const prompt = `YKS ${examType} standartlarında ${ders} dersi "${konu}" için 5 adet çoktan seçmeli soru üret. JSON formatında ver: [{"question": "...", "options": ["A)...","B)...","C)...","D)...","E)..."], "answer": "A", "explanation": "..."}]`;
-  try {
-    const text = await callClaudeAPI(prompt);
-    const questions = extractJSON(text);
-    runner.innerHTML = `<div class="card pad"><h3>${ders} - ${konu} Testi</h3>` + questions.map((q, i) => `
-      <div style="margin: 15px 0; border-bottom: 1px solid var(--line-soft); padding-bottom: 10px;">
-        <p><b>${i+1}. ${q.question}</b></p>
-        ${q.options.map(opt => `<div style="margin: 4px 0; font-size:14px;">${opt}</div>`).join("")}
-        <p style="color: var(--green); font-size: 13px; margin-top: 6px;"><b>Cevap:</b> ${q.answer}</p>
-        <p style="color: var(--ink-soft); font-size: 13px;"><b>Çözüm:</b> ${q.explanation}</p>
-      </div>
-    `).join("") + `</div>`;
-  } catch(e) {
-    runner.innerHTML = `<div class="card pad empty" style="color:var(--red);">Test üretilemedi: ${e.message}</div>`;
-  }
-});
-
-// PHOTO SOLVE & ARSIV
-let psImageBase64 = null;
-const psFileInput = document.getElementById("psFile");
-const psDropZone = document.getElementById("psDropZone");
-
-psDropZone.addEventListener("click", ()=>psFileInput.click());
-psFileInput.addEventListener("change", (e)=>{
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = (event)=>{
-    const img = new Image();
-    img.onload = ()=>{
-      const canvas = document.createElement("canvas");
-      let w = img.width, h = img.height;
-      if(w > 1200 || h > 1200) {
-        if(w > h) { h = Math.round(h * 1200 / w); w = 1200; }
-        else { w = Math.round(w * 1200 / h); h = 1200; }
-      }
-      canvas.width = w; canvas.height = h;
-      canvas.getContext("2d").drawImage(img, 0, 0, w, h);
-      const dataUrl = canvas.toDataURL("image/jpeg", 0.8);
-      psImageBase64 = dataUrl.split(",")[1];
-      document.getElementById("psPlaceholder").classList.add("hidden");
-      const prev = document.getElementById("psPreview");
-      prev.src = dataUrl; prev.classList.remove("hidden");
-      document.getElementById("psSolve").disabled = false;
-    };
-    img.src = event.target.result;
-  };
-  reader.readAsDataURL(file);
-});
-
-document.getElementById("psSolve").addEventListener("click", async ()=>{
-  if(!psImageBase64) return;
-  const resultWrap = document.getElementById("psResult");
-  const btn = document.getElementById("psSolve");
-  btn.disabled = true; btn.textContent = "Çözülüyor...";
-  resultWrap.innerHTML = `<div class="card pad empty">Soru çözülüyor...</div>`;
-
-  try {
-    const resp = await fetch("/api/gemini", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: "Bu görseldeki soruyu adım adım çöz.", image: psImageBase64, mediaType: "image/jpeg" })
-    });
-    const data = await resp.json();
-    if(!resp.ok) throw new Error(data.result || data.error || "Hata oluştu.");
-    resultWrap.innerHTML = `<div class="card pad" style="white-space: pre-wrap; line-height: 1.6;">${data.result}</div>`;
-    state.arsiv.push({ text: data.result });
-    saveState();
-  } catch(e) {
-    resultWrap.innerHTML = `<div class="card pad empty" style="color:var(--red);">Hata: ${e.message}</div>`;
-  } finally {
-    btn.disabled = false; btn.textContent = "Soruyu Çöz";
-  }
-});
-
-function renderArsiv(){
-  const wrap = document.getElementById("arsivList");
-  wrap.innerHTML = state.arsiv.length ? state.arsiv.map((a, i) => `
-    <div style="padding:8px 0; border-bottom:1px solid var(--line-soft);"><b>#${i+1}</b><div style="font-size:13px; margin-top:4px;">${a.text}</div></div>
-  `).join("") : `<div class="empty">Arşiv boş.</div>`;
-}
-
-// AI COACH
-document.getElementById("chatSend").addEventListener("click", async ()=>{
-  const input = document.getElementById("chatInput");
-  const text = input.value.trim();
-  if(!text) return;
-  const win = document.getElementById("chatWindow");
-  win.innerHTML += `<div class="msg user">${text}</div>`;
-  input.value = "";
-  win.scrollTop = win.scrollHeight;
-
-  try {
-    const reply = await callClaudeAPI(`Sen bir YKS koçusun. Öğrenci: ${text}`);
-    win.innerHTML += `<div class="msg ai">${reply}</div>`;
-    win.scrollTop = win.scrollHeight;
-  } catch(e) {
-    win.innerHTML += `<div class="msg ai" style="color:var(--red);">Bağlantı kurulamadı.</div>`;
-  }
-});
-
-// POMODORO
-let pomoTimer = null;
-function initPomodoro(){
-  let secs = 25*60;
-  const disp = document.getElementById("pomoDisplay");
-  const btn = document.getElementById("pomoToggle");
-  btn.onclick = () => {
-    if(pomoTimer){ clearInterval(pomoTimer); pomoTimer=null; btn.textContent="Başlat"; return; }
-    btn.textContent="Durdur";
-    pomoTimer = setInterval(()=>{
-      secs--;
-      const m = Math.floor(secs/60).toString().padStart(2,'0');
-      const s = (secs%60).toString().padStart(2,'0');
-      disp.textContent = `${m}:${s}`;
-      if(secs<=0){ clearInterval(pomoTimer); alert("Süre bitti!"); }
-    }, 1000);
-  };
-}
-
-// MOTIVATION
-function initMotivation(){
-  const target = new Date("2027-06-19");
-  const diff = Math.ceil((target - new Date()) / (1000*60*60*24));
-  document.getElementById("yksDays").textContent = diff > 0 ? diff : 0;
-  
-  const badges = [
-    {name: "İlk Adım", desc: "Sisteme giriş yaptın", ok: true},
-    {name: "Soru Avcısı", desc: "10 soru çöz", ok: state.sorular.length>=10},
-    {name: "Deneme Kurdu", desc: "3 deneme gir", ok: state.denemeler.length>=3}
-  ];
-  document.getElementById("badgeGrid").innerHTML = badges.map(b => `
-    <div class="badge ${b.ok?'':'locked'}"><b>${b.name}</b><div style="font-size:11px; color:var(--ink-soft);">${b.desc}</div></div>
-  `).join("");
-}
-
-// KAYNAK & SLEEP
-document.getElementById("kAdd").addEventListener("click", ()=>{
-  const name = document.getElementById("kName").value.trim();
-  if(!name) return;
-  state.kaynaklar.push(name);
-  saveState();
-  document.getElementById("kName").value="";
-  renderKaynak();
-});
-function renderKaynak(){
-  document.getElementById("kList").innerHTML = state.kaynaklar.map(k => `<div>📚 ${k}</div>`).join("") || `<div class="empty">Kaynak yok.</div>`;
-}
-
-document.getElementById("sAdd").addEventListener("click", ()=>{
-  const h = document.getElementById("sHours").value;
-  if(!h) return;
-  state.uyku.push(h);
-  saveState();
-  document.getElementById("sHours").value="";
-  renderSleep();
-});
-function renderSleep(){
-  document.getElementById("sList").innerHTML = state.uyku.map(s => `<div>😴 ${s} saat</div>`).join("") || `<div class="empty">Uyku kaydı yok.</div>`;
-}
-
-// GROUP STUDY
-function setupGroupShare(){
-  const base = location.origin + location.pathname;
-  const linkInput = document.getElementById("groupLink");
-  linkInput.value = `${base}?user=${encodeURIComponent(state.profile.isim)}`;
-  
-  document.getElementById("groupCopy").addEventListener("click", ()=>{
-    linkInput.select();
-    linkInput.setSelectionRange(0, 99999);
-    try {
-      navigator.clipboard.writeText(linkInput.value).then(() => {
-        document.getElementById("groupCopy").textContent = "Kopyalandı!";
-        setTimeout(()=>document.getElementById("groupCopy").textContent="Kopyala", 1500);
-      });
-    } catch(err) {
-      document.execCommand("copy");
-      document.getElementById("groupCopy").textContent = "Kopyalandı!";
-      setTimeout(()=>document.getElementById("groupCopy").textContent="Kopyala", 1500);
-    }
-  });
-}
+if(profile) initApp();
 </script>
 </body>
 </html>
