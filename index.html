@@ -1160,7 +1160,28 @@ function renderLicenseCard(){
   desc.textContent = pro
     ? "Tüm takip araçları ve tüm AI özellikleri (Flashcard AI, Test Lab, AI Koç, Soru Çöz) sınırsız açık."
     : "Takip araçları (konu, deneme, program, uyku, pomodoro, kaynak, liderlik vb.) sınırsız açık. AI özellikleri Pro Pakete özeldir.";
-/* =========================================================================
+/* --- AI KÖPRÜSÜ --- */
+window.requireProFeature = () => true; 
+
+// Butonları kendi kontrolümüze alıyoruz
+document.addEventListener("DOMContentLoaded", () => {
+  const fcBtn = document.getElementById("fcGenAI");
+  if(fcBtn) {
+    fcBtn.onclick = async (e) => {
+      e.preventDefault(); e.stopPropagation();
+      await handleAIFlashcardClick();
+    };
+  }
+  
+  const tlBtn = document.getElementById("tlStart");
+  if(tlBtn) {
+    tlBtn.onclick = async (e) => {
+      e.preventDefault(); e.stopPropagation();
+      await generateTestLab();
+    };
+  }
+});
+  /* =========================================================================
    GEMINI AI ENTEGRASYON VE ÇÖKME ENGELLEYİCİ KÖPRÜ (LINE 1163)
    ========================================================================= */
 
