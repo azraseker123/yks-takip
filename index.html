@@ -1160,22 +1160,51 @@ function renderLicenseCard(){
   desc.textContent = pro
     ? "Tüm takip araçları ve tüm AI özellikleri (Flashcard AI, Test Lab, AI Koç, Soru Çöz) sınırsız açık."
     : "Takip araçları (konu, deneme, program, uyku, pomodoro, kaynak, liderlik vb.) sınırsız açık. AI özellikleri Pro Pakete özeldir.";
- // AI Buton Bağlantıları
+// AI Buton Bağlantıları ve Dinleyicileri
 async function loadFlashcardsUI(ders, konu) {
   const container = document.getElementById("flashcardList") || document.getElementById("flashcardContainer");
   if (container) container.innerHTML = "<div style='text-align:center; padding:20px;'>🤖 AI 10 adet özgün kart hazırlıyor, lütfen bekleyin...</div>";
   try {
     const cards = await generateFlashcards(ders, konu);
-    if (typeof renderCards === "function") {
-      renderCards(cards);
-    } else if (typeof renderFlashcards === "function") {
-      renderFlashcards(cards);
-    }
+    if (typeof renderCards === "function") renderCards(cards);
+    else if (typeof renderFlashcards === "function") renderFlashcards(cards);
   } catch (err) {
     alert("AI Kart Üretim Hatası: " + (err.message || "API bağlantısı kurulamadı."));
   }
 }
 
+async function startTest(ders, konu) {
+  const container = document.getElementById("testQuestionsContainer") || document.getElementById("testlabRunner") || document.getElementById("testContainer");
+  if (container) container.innerHTML = "<div style='text-align:center; padding:20px;'>🤖 AI 10 adet özgün YKS sorusu hazırlıyor, lütfen bekleyin...</div>";
+  try {
+    const questions = await generateTest(ders, konu);
+    if (typeof renderTest === "function") renderTest(questions);
+    else if (typeof renderQuestions === "function") renderQuestions(questions);
+  } catch (err) {
+    alert("AI Test Üretim Hatası: " + (err.message || "API bağlantısı kurulamadı."));
+  }
+}
+
+// Buton Tıklama Dinleyicileri
+document.addEventListener("DOMContentLoaded", () => {
+  const fcBtn = document.getElementById("fcGenAI");
+  if (fcBtn) {
+    fcBtn.addEventListener("click", async () => {
+      const ders = document.getElementById("fcSubject")?.value || "Genel";
+      const konu = document.getElementById("fcTopic")?.value || "Genel";
+      await loadFlashcardsUI(ders, konu);
+    });
+  }
+
+  const testBtn = document.getElementById("tlStart");
+  if (testBtn) {
+    testBtn.addEventListener("click", async () => {
+      const ders = document.getElementById("tlSubject")?.value || document.getElementById("testSubject")?.value || "Genel";
+      const konu = document.getElementById("tlTopic")?.value || document.getElementById("testTopic")?.value || "Genel";
+      await startTest(ders, konu);
+    });
+  }
+});
 async function startTest(ders, konu) {
   const container = document.getElementById("testQuestionsContainer") || document.getElementById("testContainer");
   if (container) container.innerHTML = "<div style='text-align:center; padding:20px;'>🤖 AI 10 adet özgün YKS sorusu hazırlıyor, lütfen bekleyin...</div>";
