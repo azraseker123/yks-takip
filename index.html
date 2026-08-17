@@ -1083,7 +1083,41 @@ function friendlyAIErrorMessage(e){
   if(e && (e.status===400 || e.status===401 || e.status===403)) return "AI isteği reddedildi. Bir süre sonra tekrar dene.";
   return "Bağlantı sorunu oluştu — birazdan tekrar dene.";
 }
+async function generateTest(subject, topic) {
+  const prompt = `YKS sınavı standartlarında, ${subject} dersinin "${topic}" konusuyla ilgili 10 adet kaliteli, özgün çoktan seçmeli soru hazırla.
+  'Aşağıdakilerden hangisi bu konunun kapsamına girer' vb. kalıp cümleleri KESİNLİKLE KULLANMA. Doğrudan derse ve konunun özüne ait gerçek YKS soruları yaz.
 
+  Yanıtı YALNIZCA geçerli bir JSON formatında döndür (başka hiçbir metin yazma):
+  [
+    {
+      "question": "Soru metni buraya",
+      "options": ["A) ...", "B) ...", "C) ...", "D) ...", "E) ..."],
+      "answer": "A) ...",
+      "explanation": "Detaylı çözüm açıklaması"
+    }
+  ]`;
+
+  const responseText = await callClaudeAPI({ prompt });
+  const cleaned = responseText.replace(/```json/g, "").replace(/```/g, "").trim();
+  return JSON.parse(cleaned);
+}
+
+async function generateFlashcards(subject, topic) {
+  const prompt = `YKS sınavına hazırlanan bir öğrenci için ${subject} dersi, "${topic}" konusu hakkında 10 adet bilgi/kavram kartı (flashcard) hazırla.
+  Sadece gerçek konu bilgilerini, formüllerini veya önemli tanımları kullan.
+
+  Yanıtı YALNIZCA geçerli bir JSON formatında döndür:
+  [
+    {
+      "q": "Soru veya Kavram Adı",
+      "a": "Kısa ve net açıklama / bilgi"
+    }
+  ]`;
+
+  const responseText = await callClaudeAPI({ prompt });
+  const cleaned = responseText.replace(/```json/g, "").replace(/```/g, "").trim();
+  return JSON.parse(cleaned);
+}
 /* =========================================================================
    LİSANS / AKTİVASYON KİLİT SİSTEMİ (Shopier uyumlu)
    ---------------------------------------------------------------------
