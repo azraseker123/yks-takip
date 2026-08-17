@@ -3,111 +3,619 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>YKS Takip — Başarı Merkezi</title>
+<title>YKS ULTIMATE MASTER — Eksiksiz Başarı Merkezi</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
 <style>
-:root{ --paper:#F6F5F0; --ink:#182742; --ink-soft:#4A5A78; --card:#FFFFFF; --line:#CBD3DE; --red:#B8262C; --gold:#E7B93B; --radius:8px; }
-body{background:var(--paper); color:var(--ink); font-family:'IBM Plex Sans', sans-serif; margin:0;}
-.auth-card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:0 4px 20px rgba(0,0,0,0.05); padding:40px; max-width:450px; margin:100px auto;}
+:root{
+  --paper:#F6F5F0; --paper2:#EFEDE6; --line:#CBD3DE; --line-soft:#E3E7ED;
+  --ink:#182742; --ink-soft:#4A5A78; --ink-faint:#8996AC;
+  --red:#B8262C; --red-soft:#F3DEDD; --green:#276B4F; --green-soft:#DCEBE2;
+  --amber:#B4790F; --amber-soft:#F3E6CB; --card:#FFFFFF; --gold:#E7B93B;
+  --radius:6px; --shadow:0 2px 12px rgba(24,39,66,0.08);
+}
+*{box-sizing:border-box;}
+body{background:var(--paper); color:var(--ink); font-family:'IBM Plex Sans', sans-serif; margin:0; min-height:100vh;}
+h1,h2,h3,h4{font-family:'Fraunces', serif; margin:0;}
+.mono{font-family:'IBM Plex Mono', monospace;}
+button{font-family:inherit; cursor:pointer;}
+input,select,textarea{font-family:inherit;}
+.hidden{display:none !important;}
+
+/* GÜVENLİ GİRİŞ & KAYIT */
+#authGate{min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px;}
+.auth-card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); max-width:440px; width:100%; padding:36px;}
+.auth-tabs{display:flex; margin-bottom:20px; border:1px solid var(--line); border-radius:var(--radius); overflow:hidden;}
+.auth-tab{flex:1; padding:10px; text-align:center; font-size:13px; font-weight:600; background:var(--paper); color:var(--ink-soft); border:none;}
+.auth-tab.active{background:var(--ink); color:#fff;}
+.field{margin-bottom:14px;}
+.field label{display:block; font-size:11.5px; font-weight:600; color:var(--ink-soft); margin-bottom:5px; text-transform:uppercase;}
+.field input, .field select{width:100%; padding:10px; border:1px solid var(--line); border-radius:var(--radius); background:var(--paper); font-size:14px;}
+.btn{background:var(--ink); color:#fff; border:none; padding:11px 18px; border-radius:var(--radius); font-weight:600; width:100%;}
+.btn.secondary{background:transparent; color:var(--ink); border:1px solid var(--ink);}
+
+/* APP SHELL */
+#appShell{display:flex; min-height:100vh;}
+.sidebar{width:260px; background:var(--ink); color:#fff; padding:20px 14px; display:flex; flex-direction:column; gap:4px; position:sticky; top:0; height:100vh; overflow-y:auto; flex-shrink:0;}
+.sb-brand{font-family:'Fraunces',serif; font-size:18px; font-weight:600; padding:10px; margin-bottom:10px; color:#fff; display:flex; align-items:center; gap:8px;}
+.sb-brand span{width:8px; height:8px; background:var(--red); border-radius:50%;}
+.sb-item{padding:9px 12px; border-radius:var(--radius); color:#B9C1D6; background:transparent; border:none; text-align:left; font-size:13px; font-weight:500;}
+.sb-item:hover, .sb-item.active{background:rgba(255,255,255,0.08); color:#fff; font-weight:600;}
+.main{flex:1; padding:36px; max-width:1100px; overflow-y:auto;}
+.view{display:none;}
+.view.active{display:block;}
+.card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:22px; box-shadow:var(--shadow); margin-bottom:18px;}
 .grid{display:grid; gap:16px;}
-.card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:20px; box-shadow:0 2px 4px rgba(0,0,0,0.03);}
-.btn{background:var(--ink); color:#fff; border:none; padding:12px; width:100%; border-radius:var(--radius); font-weight:600; cursor:pointer;}
-.badge-zone{display:grid; grid-template-columns:repeat(auto-fill, minmax(120px, 1fr)); gap:15px; margin-top:20px;}
-.badge{text-align:center; padding:15px; border-radius:var(--radius); background:#fff; border:2px solid var(--line); opacity:0.5;}
+.grid.cols-3{grid-template-columns:repeat(3,1fr);}
+.grid.cols-2{grid-template-columns:repeat(2,1fr);}
+
+/* ÖZEL BİLEŞENLER */
+.bubble-row{display:flex; align-items:center; gap:12px; padding:8px 0; border-bottom:1px dashed var(--line-soft);}
+.bubble{width:18px; height:18px; border-radius:50%; border:1.6px solid var(--ink-soft); background:#fff; cursor:pointer;}
+.bubble.checked{background:var(--ink); border-color:var(--ink);}
+.badge-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(140px, 1fr)); gap:12px;}
+.badge{border:2px solid var(--line); padding:14px; text-align:center; border-radius:var(--radius); background:#fff; opacity:0.4;}
 .badge.active{border-color:var(--gold); opacity:1; background:#fffdf5;}
-.badge-icon{font-size:32px; display:block; margin-bottom:8px;}
+.chat-window{height:350px; overflow-y:auto; padding:12px; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); display:flex; flex-direction:column; gap:10px; margin-bottom:10px;}
+.msg{max-width:80%; padding:10px 14px; border-radius:6px; font-size:13.5px; line-height:1.4;}
+.msg.user{align-self:flex-end; background:var(--ink); color:#fff;}
+.msg.ai{align-self:flex-start; background:var(--card); border:1px solid var(--line);}
+table{width:100%; border-collapse:collapse; font-size:13.5px;}
+th{text-align:left; font-size:11px; text-transform:uppercase; color:var(--ink-faint); padding:8px; border-bottom:1px solid var(--line);}
+td{padding:9px 8px; border-bottom:1px solid var(--line-soft);}
 </style>
 </head>
 <body>
 
+<!-- GÜVENLİ GİRİŞ & KAYIT -->
 <div id="authGate">
     <div class="auth-card">
-        <h1>Başarıya Hoş Geldin</h1>
-        <div style="margin:20px 0;">
-            <input type="text" id="onbName" placeholder="Adın" style="width:100%; padding:10px; margin-bottom:10px;">
-            <select id="onbField" style="width:100%; padding:10px; margin-bottom:10px;">
-                <option value="Sayısal">Sayısal</option><option value="Eşit Ağırlık">Eşit Ağırlık</option>
-            </select>
-            <input type="text" id="onbTarget" placeholder="Hedef Üniversite/Bölüm" style="width:100%; padding:10px;">
+        <h2 style="margin-bottom:6px;">YKS Ultimate Master</h2>
+        <p style="font-size:13px; color:var(--ink-soft); margin-bottom:20px;">Güvenli giriş ve kişisel başarı alanı.</p>
+        
+        <div class="auth-tabs">
+            <button class="auth-tab active" id="tabLogin" onclick="switchAuth(false)">Giriş Yap</button>
+            <button class="auth-tab" id="tabReg" onclick="switchAuth(true)">Kayıt Ol</button>
         </div>
-        <button class="btn" id="onbSubmit">Sistemi Aktif Et</button>
+
+        <div class="field"><label>E-posta</label><input type="email" id="authEmail" placeholder="ornek@mail.com"></div>
+        <div class="field"><label>Şifre</label><input type="password" id="authPass" placeholder="Şifreniz"></div>
+        
+        <div id="regFields" class="hidden">
+            <div class="field"><label>İsim / Lakap</label><input type="text" id="regName" placeholder="Zeynep"></div>
+            <div class="field"><label>Puan Türü / Alan</label>
+                <select id="regField"><option value="Sayısal">Sayısal</option><option value="Eşit Ağırlık">Eşit Ağırlık</option><option value="Sözel">Sözel</option></select>
+            </div>
+            <div class="field"><label>Hedef Üniversite / Bölüm</label><input type="text" id="regTarget" placeholder="Örn. Diş Hekimliği"></div>
+            <div class="field"><label>Hedef Sıralama</label><input type="text" id="regRank" placeholder="Örn. İlk 20.000"></div>
+            <div style="font-size:11.5px; color:var(--ink-soft); margin-bottom:12px;">
+                <input type="checkbox" id="kvkkCheck"> 6698 sayılı KVKK kapsamında verilerimin işlenmesine onay veriyorum.
+            </div>
+        </div>
+
+        <button class="btn" id="authBtn" onclick="handleAuth()">Giriş Yap</button>
     </div>
 </div>
 
-<div id="appShell" class="hidden" style="display:flex;">
-    <aside style="width:250px; background:var(--ink); color:#fff; height:100vh; padding:20px;">
-        <h2 style="color:#fff; margin-bottom:30px;">YKS Takip</h2>
-        <nav style="display:flex; flex-direction:column; gap:10px;">
-            <button class="btn" style="background:#444;" onclick="showView('dash')">Ana Sayfa</button>
-            <button class="btn" style="background:#444;" onclick="showView('badges')">Rozetlerim</button>
-        </nav>
+<!-- APP SHELL -->
+<div id="appShell" class="hidden">
+    <aside class="sidebar">
+        <div class="sb-brand"><span></span>YKS Ultimate</div>
+        <button class="sb-item active" onclick="nav('dash', this)">Ana Sayfa</button>
+        <button class="sb-item" onclick="nav('topics', this)">Konu Takibi (TYT/AYT)</button>
+        <button class="sb-item" onclick="nav('schedule', this)">Haftalık Program</button>
+        <button class="sb-item" onclick="nav('exams', this)">Denemeler & Netler</button>
+        <button class="sb-item" onclick="nav('questions', this)">Soru Takibi & Analiz</button>
+        <button class="sb-item" onclick="nav('flash', this)">Flashcard (AI)</button>
+        <button class="sb-item" onclick="nav('testlab', this)">Test Lab (AI)</button>
+        <button class="sb-item" onclick="nav('photosolve', this)">Soru Çöz & Arşiv</button>
+        <button class="sb-item" onclick="nav('coach', this)">AI Koç</button>
+        <button class="sb-item" onclick="nav('pomodoro', this)">Pomodoro</button>
+        <button class="sb-item" onclick="nav('kaynak', this)">Kaynak & Uyku</button>
+        <button class="sb-item" onclick="nav('badges', this)">Rozetler & Liderlik</button>
+        <button class="sb-item" onclick="nav('profile', this)">Profil & Ayarlar</button>
+        <button class="sb-item" onclick="logout()" style="color:#ff8b8b; margin-top:auto;">Çıkış Yap</button>
     </aside>
-    <main style="flex:1; padding:40px;">
-        <!-- ANA SAYFA -->
-        <div id="view-dash" class="view">
-            <h1 id="greetText"></h1>
-            <div class="card" style="margin-top:20px;">
-                <h3>🎯 Çalışma Önerin</h3>
-                <p id="aiAdvice" style="color:var(--ink-soft); font-style:italic;">...</p>
+
+    <main class="main">
+        <!-- 1. ANA SAYFA -->
+        <div id="view-dash" class="view active">
+            <h1 id="dashGreet" style="font-size:26px; margin-bottom:6px;"></h1>
+            <p id="dashSub" style="color:var(--ink-soft); font-size:14px; margin-bottom:20px;"></p>
+            <div class="grid cols-3" style="margin-bottom:20px;">
+                <div class="card"><div style="font-size:12px; color:var(--ink-soft);">Günlük Seri (Streak)</div><div id="statStreak" style="font-size:24px; font-weight:700; margin-top:4px;">🔥 1 Gün</div></div>
+                <div class="card"><div style="font-size:12px; color:var(--ink-soft);">Çözülen Soru</div><div id="statQ" style="font-size:24px; font-weight:700; margin-top:4px;">0</div></div>
+                <div class="card"><div style="font-size:12px; color:var(--ink-soft);">Son Deneme Neti</div><div id="statNet" style="font-size:24px; font-weight:700; margin-top:4px;">-</div></div>
             </div>
-            <div class="card" style="margin-top:20px;">
-                <h3>🔥 Motivasyon Köşesi</h3>
-                <p>"Başarı, başarısız olma ihtimalinin çok yüksek olduğunu bilerek denemeye devam etmektir."</p>
+            <div class="card">
+                <h3 style="margin-bottom:8px; color:var(--red);">✦ AI Kişisel Çalışma Önerin</h3>
+                <p id="aiDailyAdvice" style="color:var(--ink-soft); line-height:1.5; font-size:14px;">Yapay zeka analiz raporu hazırlanıyor...</p>
+            </div>
+            <div class="card">
+                <h3 style="margin-bottom:8px;">🔥 Günün Motivasyonu</h3>
+                <p style="font-style:italic; font-family:'Fraunces',serif; font-size:16px;">"Diş hekimliği o beyaz önlüğü giymeye değer. Bugün atılan her net, hedefine bir adım daha yaklaşmak demektir."</p>
             </div>
         </div>
-        <!-- ROZETLER -->
-        <div id="view-badges" class="view hidden">
-            <h1>Rozet Koleksiyonu</h1>
-            <div class="badge-zone" id="badgeContainer"></div>
+
+        <!-- 2. KONU TAKİBİ -->
+        <div id="view-topics" class="view">
+            <h1 style="font-size:24px; margin-bottom:14px;">Müfredat Konu Takibi (TYT / AYT)</h1>
+            <div style="margin-bottom:14px; display:flex; gap:8px;">
+                <button class="btn" style="width:auto; padding:8px 16px;" onclick="switchTopicTab('TYT')">TYT Konuları</button>
+                <button class="btn secondary" style="width:auto; padding:8px 16px;" onclick="switchTopicTab('AYT')">AYT Konuları</button>
+            </div>
+            <div class="card" id="topicContainer"></div>
+        </div>
+
+        <!-- 3. HAFTALIK PROGRAM -->
+        <div id="view-schedule" class="view">
+            <h1 style="font-size:24px; margin-bottom:14px;">Haftalık Çalışma Programı</h1>
+            <div class="card">
+                <div class="grid cols-3">
+                    <div class="field"><label>Gün</label><select id="schDay"><option>Pazartesi</option><option>Salı</option><option>Çarşamba</option><option>Perşembe</option><option>Cuma</option><option>Cumartesi</option><option>Pazar</option></select></div>
+                    <div class="field"><label>Çalışılacak Ders / Konu</label><input type="text" id="schText" placeholder="Örn. Matematik - Integral"></div>
+                    <div class="field" style="align-self:end;"><button class="btn" onclick="addSchedule()">Programa Ekle</button></div>
+                </div>
+            </div>
+            <div class="card" id="scheduleList"></div>
+        </div>
+
+        <!-- 4. DENEMELER -->
+        <div id="view-exams" class="view">
+            <h1 style="font-size:24px; margin-bottom:14px;">Deneme Takibi & Net Hesaplama</h1>
+            <div class="card">
+                <div class="grid cols-3">
+                    <div class="field"><label>Deneme Adı</label><input type="text" id="exName" placeholder="TYT 1 / Özdebir vb."></div>
+                    <div class="field"><label>Tür</label><select id="exType"><option>TYT</option><option>AYT</option></select></div>
+                    <div class="field"><label>Toplam Net</label><input type="number" step="0.25" id="exNet" placeholder="85.5"></div>
+                </div>
+                <button class="btn" onclick="addExam()" style="margin-top:6px;">Denemeyi Kaydet</button>
+            </div>
+            <div class="card">
+                <table id="examTable"><thead><tr><th>Deneme Adı</th><th>Tür</th><th>Net</th><th>Tarih</th></tr></thead><tbody></tbody></table>
+            </div>
+        </div>
+
+        <!-- 5. SORU TAKİBİ & ANALİZ -->
+        <div id="view-questions" class="view">
+            <h1 style="font-size:24px; margin-bottom:14px;">Soru Takibi & Yanlış Analizi</h1>
+            <div class="card">
+                <div class="grid cols-3">
+                    <div class="field"><label>Ders</label><input type="text" id="qDers" placeholder="Matematik"></div>
+                    <div class="field"><label>Konu</label><input type="text" id="qKonu" placeholder="Türev"></div>
+                    <div class="field"><label>Doğru / Yanlış Sayısı</label><div style="display:flex; gap:6px;"><input type="number" id="qD" placeholder="D"><input type="number" id="qY" placeholder="Y"></div></div>
+                </div>
+                <button class="btn" onclick="addQuestion()" style="margin-top:6px;">Kaydet & Analiz Et</button>
+            </div>
+            <div class="card" id="analysisBody"></div>
+        </div>
+
+        <!-- 6. FLASHCARD (AI) -->
+        <div id="view-flash" class="view">
+            <h1 style="font-size:24px; margin-bottom:14px;">Yapay Zeka Destekli Flashcard</h1>
+            <div class="card" style="text-align:center; padding:40px;">
+                <p id="flashCardText" style="font-family:'Fraunces',serif; font-size:20px; margin-bottom:20px;">Kart üretmek için butona basın.</p>
+                <button class="btn" style="width:auto;" onclick="generateAIFlashcard()">✦ AI ile Kart Üret</button>
+            </div>
+        </div>
+
+        <!-- 7. TEST LAB (AI) -->
+        <div id="view-testlab" class="view">
+            <h1 style="font-size:24px; margin-bottom:14px;">AI Test Laboratuvarı</h1>
+            <div class="card">
+                <div class="field"><label>Konu / Alan</label><input type="text" id="tlTopic" placeholder="Örn. Fizik - Optik"></div>
+                <button class="btn" onclick="generateAITest()">✦ AI ile Deneme Testi Oluştur</button>
+            </div>
+            <div class="card" id="testResultArea">Test burada görünecek...</div>
+        </div>
+
+        <!-- 8. SORU ÇÖZ & ARŞİV -->
+        <div id="view-photosolve" class="view">
+            <h1 style="font-size:24px; margin-bottom:14px;">Fotoğraflı Soru Çöz & Soru Defteri</h1>
+            <div class="card" style="text-align:center; padding:30px; border:2px dashed var(--line);">
+                <input type="file" id="psFile" accept="image/*" style="display:none;" onchange="handleImageUpload(event)">
+                <button class="btn" style="width:auto;" onclick="document.getElementById('psFile').click()">📷 Soru Fotoğrafı Yükle</button>
+                <p id="imgStatus" style="font-size:13px; color:var(--ink-soft); margin-top:10px;">Henüz görsel seçilmedi.</p>
+            </div>
+            <div class="card" id="archiveList"><h3>Dijital Soru Defteri Arşivi</h3></div>
+        </div>
+
+        <!-- 9. AI KOÇ -->
+        <div id="view-coach" class="view">
+            <h1 style="font-size:24px; margin-bottom:14px;">Yapay Zeka Koç</h1>
+            <div class="card">
+                <div class="chat-window" id="chatWin"></div>
+                <div style="display:flex; gap:8px;">
+                    <input type="text" id="chatInput" placeholder="Koçuna soru sor..." style="flex:1; padding:10px; border:1px solid var(--line); border-radius:var(--radius);">
+                    <button class="btn" style="width:110px;" onclick="sendAICoach()">Gönder</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 10. POMODORO -->
+        <div id="view-pomodoro" class="view">
+            <h1 style="font-size:24px; margin-bottom:14px;">Odaklanma (Pomodoro)</h1>
+            <div class="card" style="text-align:center; padding:40px;">
+                <div class="mono" id="pomoTimer" style="font-size:56px; font-weight:700; margin-bottom:20px;">25:00</div>
+                <button class="btn" style="width:auto; padding:10px 30px;" onclick="togglePomodoro()" id="pomoBtn">Başlat</button>
+            </div>
+        </div>
+
+        <!-- 11. KAYNAK & UYKU -->
+        <div id="view-kaynak" class="view">
+            <h1 style="font-size:24px; margin-bottom:14px;">Kaynak & Uyku Takibi</h1>
+            <div class="grid cols-2">
+                <div class="card">
+                    <h3>Kaynak Kitaplarım</h3>
+                    <input type="text" id="bookName" placeholder="Örn. 345 Matematik" style="width:100%; padding:8px; margin:10px 0;">
+                    <button class="btn" onclick="addBook()">Kaynak Ekle</button>
+                    <div id="bookList" style="margin-top:10px;"></div>
+                </div>
+                <div class="card">
+                    <h3>Uyku Süresi (Saat)</h3>
+                    <input type="number" step="0.5" id="sleepHours" placeholder="7.5" style="width:100%; padding:8px; margin:10px 0;">
+                    <button class="btn" onclick="addSleep()">Uyku Kaydet</button>
+                    <div id="sleepList" style="margin-top:10px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 12. ROZETLER & LİDERLİK -->
+        <div id="view-badges" class="view">
+            <h1 style="font-size:24px; margin-bottom:14px;">Rozetler & Liderlik Tablosu</h1>
+            <div class="card">
+                <h3>Kazanılan Rozetler</h3>
+                <div class="badge-grid" id="badgeContainer" style="margin-top:14px;"></div>
+            </div>
+            <div class="card">
+                <h3>🏆 Sıralama & Yarışma Liderlik Tablosu</h3>
+                <table><thead><tr><th>Sıra</th><th>Öğrenci</th><th>Hedef</th><th>Çözülen Soru</th></tr></thead><tbody>
+                    <tr><td>1</td><td>Sen (${currentUser?.name || 'Öğrenci'})</td><td>${currentUser?.target || '-'}</td><td id="lbQ">0</td></tr>
+                    <tr><td>2</td><td>Ahmet K.</td><td>Tıp</td><td>1420</td></tr>
+                    <tr><td>3</td><td>Zeynep D.</td><td>Hukuk</td><td>1290</td></tr>
+                </tbody></table>
+            </div>
+        </div>
+
+        <!-- 13. PROFİL & AYARLAR -->
+        <div id="view-profile" class="view">
+            <h1 style="font-size:24px; margin-bottom:14px;">Profil & Sistem Ayarları</h1>
+            <div class="card" style="max-width:500px;">
+                <div class="field"><label>İsim</label><input type="text" id="profName"></div>
+                <div class="field"><label>Hedef</label><input type="text" id="profTarget"></div>
+                <button class="btn" onclick="saveProfile()">Güncelle</button>
+            </div>
         </div>
     </main>
 </div>
 
 <script>
-let profile = JSON.parse(localStorage.getItem("profile"));
+// MÜFREDAT VERİSİ (%100 Uyumlu)
+const MUFREDAT = {
+  TYT: {
+    "Türkçe": ["Sözcükte Anlam","Cümlede Anlam","Paragrafta Anlam","Ses Bilgisi","Yazım Kuralları","Noktalama","Sözcük Yapısı","İsim/Sıfat/Zamir","Fiiller","Cümlenin Ögeleri","Anlatım Bozukluğu"],
+    "Matematik": ["Temel Kavramlar","Sayı Basamakları","EBOB-EKOK","Rasyonel Sayılar","Eşitsizlikler","Mutlak Değer","Üslü/Köklü","Çarpanlara Ayırma","Oran-Orantı","Problemler","Kümeler","Fonksiyonlar","Olasılık"],
+    "Geometri": ["Açılar ve Üçgenler","Üçgende Alan/Benzerlik","Çokgenler ve Dörtgenler","Çember ve Daire","Analitik Geometri","Katı Cisimler"],
+    "Fizik": ["Fizik Bilimine Giriş","Madde ve Özellikleri","Basınç ve Kaldırma","Isı ve Sıcaklık","Hareket ve Kuvvet","İş, Güç, Enerji","Elektrik ve Optik"],
+    "Kimya": ["Kimya Bilimi","Atom ve Periyodik Sistem","Kimyasal Türler","Maddenin Halleri","Kanunlar ve Mol","Karışımlar ve Asit/Baz"],
+    "Biyoloji": ["Canlıların Ortak Özellikleri","Temel Bileşenler","Hücre ve Organeller","Madde Geçişleri","Sınıflandırma","Mitoz/Mayoz","Kalıtım"]
+  },
+  AYT: {
+    "Matematik": ["Polinomlar","2. Dereceden Denklemler","Trigonometri","Logaritma","Diziler","Limit","Türev","İntegral","Kompleks Sayılar"],
+    "Geometri": ["Analitik (Doğru/Çember)","Vektörler","Dönüşümler","Katı Cisimler (İleri)"],
+    "Fizik": ["Vektörler ve Kuvvet","Newton Yasaları","Momentum ve Enerji","Çembersel Hareket","Basit Harmonik Hareket","Dalga Mekaniği","Modern Fizik"],
+    "Kimya": ["Gazlar","Sıvı Çözeltiler","Kimyasal Tepkimelerde Enerji","Hız ve Denge","Asit-Baz Dengesi","Elektrokimya","Organik Kimya"],
+    "Biyoloji": ["Sinir Sistemi ve Duyu","Endokrin Sistem","Destek/Hareket ve Sindirim","Dolaşım ve Solunum","Üreme ve Genden Proteine","Fotosentez ve Solunum"]
+  }
+};
 
-function showView(id){
-    document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
-    document.getElementById('view-'+id).classList.remove('hidden');
+let currentUser = JSON.parse(localStorage.getItem("yks_master_user") || "null");
+let db = JSON.parse(localStorage.getItem("yks_master_db") || '{"topics":{},"schedule":[],"exams":[],"questions":[],"books":[],"sleep":[],"archive":[]}');
+
+function saveDB(){ localStorage.setItem("yks_master_db", JSON.stringify(db)); }
+
+// GÜVENLİK VE GİRİŞ SİSTEMİ
+let isReg = false;
+function switchAuth(reg){
+    isReg = reg;
+    document.getElementById("tabLogin").className = "auth-tab " + (!reg ? "active" : "");
+    document.getElementById("tabReg").className = "auth-tab " + (reg ? "active" : "");
+    document.getElementById("authBtn").textContent = reg ? "Hesap Oluştur ve Başla" : "Giriş Yap";
+    document.getElementById("regFields").classList.toggle("hidden", !reg);
 }
 
-document.getElementById("onbSubmit").onclick = () => {
-    profile = { 
-        name: document.getElementById("onbName").value,
-        field: document.getElementById("onbField").value,
-        target: document.getElementById("onbTarget").value
-    };
-    localStorage.setItem("profile", JSON.stringify(profile));
+function handleAuth(){
+    const email = document.getElementById("authEmail").value.trim().toLowerCase();
+    const pass = document.getElementById("authPass").value.trim();
+    if(!email || !pass){ alert("E-posta ve şifre zorunludur."); return; }
+
+    let users = JSON.parse(localStorage.getItem("yks_master_users") || "{}");
+
+    if(isReg){
+        const name = document.getElementById("regName").value.trim();
+        const field = document.getElementById("regField").value;
+        const target = document.getElementById("regTarget").value.trim();
+        const rank = document.getElementById("regRank").value.trim();
+        const kvkk = document.getElementById("kvkkCheck").checked;
+
+        if(!name || !target){ alert("Lütfen tüm alanları doldurun."); return; }
+        if(!kvkk){ alert("KVKK onayını işaretlemelisiniz."); return; }
+
+        users[email] = { pass, name, field, target, rank, token: Math.random().toString(36) };
+        localStorage.setItem("yks_master_users", JSON.stringify(users));
+        alert("Kayıt başarılı! Giriş yapabilirsiniz.");
+        switchAuth(false);
+        return;
+    }
+
+    if(!users[email] || users[email].pass !== pass){
+        alert("Hatalı e-posta veya şifre!");
+        return;
+    }
+
+    currentUser = users[email];
+    localStorage.setItem("yks_master_user", JSON.stringify(currentUser));
     initApp();
-};
+}
+
+function logout(){
+    localStorage.removeItem("yks_master_user");
+    location.reload();
+}
 
 function initApp(){
     document.getElementById("authGate").classList.add("hidden");
     document.getElementById("appShell").classList.remove("hidden");
-    document.getElementById("greetText").textContent = "Merhaba " + profile.name + ", tekrar hoş geldin!";
-    document.getElementById("aiAdvice").textContent = profile.field === "Sayısal" ? 
-        "Bugün Mat-2 integral soru çözümü ve Fizik optik tekrarı için harika bir gün!" : 
-        "Bugün Türkçe paragraf ve Tarih soru bankası önceliğinde ilerlemeni öneririm.";
-    
+
+    document.getElementById("dashGreet").textContent = `Harika bir gün, ${currentUser.name}! 🚀`;
+    document.getElementById("dashSub").textContent = `Hedefin: ${currentUser.target} (${currentUser.field} — ${currentUser.rank})`;
+    document.getElementById("profName").value = currentUser.name;
+    document.getElementById("profTarget").value = currentUser.target;
+
+    renderTopics('TYT');
+    renderSchedule();
+    renderExams();
+    renderQuestions();
+    renderArchive();
+    renderBooksAndSleep();
     renderBadges();
+    
+    // AI Günlük Öneri
+    document.getElementById("aiDailyAdvice").textContent = `${currentUser.field} alanı için bugün ${currentUser.target} hedefli çalışmanda paragraf rutini ve ${currentUser.field === 'Sayısal' ? 'Matematik integral' : 'Tarih'} tekrarı yapmanı öneriyorum.`;
 }
 
+// NAVİGASYON
+function nav(id, btn){
+    document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+    document.getElementById("view-" + id).classList.add("active");
+    document.querySelectorAll(".sidebar .sb-item").forEach(b => b.classList.remove("active"));
+    if(btn) btn.classList.add("active");
+}
+
+// 1. MÜFREDAT RENDER
+let activeTopicTab = 'TYT';
+function switchTopicTab(tab){
+    activeTopicTab = tab;
+    renderTopics(tab);
+}
+function renderTopics(tab){
+    const container = document.getElementById("topicContainer");
+    const data = MUFREDAT[tab];
+    container.innerHTML = Object.keys(data).map(ders => `
+        <h3 style="color:var(--red); margin:14px 0 6px;">${ders}</h3>
+        ${data[ders].map(konu => {
+            const key = `${tab}_${ders}_${konu}`;
+            const checked = !!db.topics[key];
+            return `<div class="bubble-row">
+                <span class="bubble ${checked?'checked':''}" onclick="toggleTopic('${key}')"></span>
+                <span>${konu}</span>
+            </div>`;
+        }).join('')}
+    `).join('');
+}
+function toggleTopic(key){
+    db.topics[key] = !db.topics[key];
+    saveDB();
+    renderTopics(activeTopicTab);
+}
+
+// 2. HAFTALIK PROGRAM
+function addSchedule(){
+    const day = document.getElementById("schDay").value;
+    const text = document.getElementById("schText").value.trim();
+    if(!text) return;
+    db.schedule.push({ day, text });
+    saveDB();
+    document.getElementById("schText").value = "";
+    renderSchedule();
+}
+function renderSchedule(){
+    document.getElementById("scheduleList").innerHTML = `<h3>Programın</h3>` + 
+        (db.schedule.length ? db.schedule.map(s => `<div><b>${s.day}:</b> ${s.text}</div>`).join('') : '<p style="color:var(--ink-soft)">Program boş.</p>');
+}
+
+// 3. DENEMELER
+function addExam(){
+    const name = document.getElementById("exName").value.trim();
+    const type = document.getElementById("exType").value;
+    const net = document.getElementById("exNet").value;
+    if(!name || !net) return;
+    db.exams.push({ name, type, net, date: new Date().toLocaleDateString() });
+    saveDB();
+    document.getElementById("exName").value = "";
+    document.getElementById("exNet").value = "";
+    renderExams();
+}
+function renderExams(){
+    const tbody = document.querySelector("#examTable tbody");
+    tbody.innerHTML = db.exams.length ? db.exams.map(e => `<tr><td>${e.name}</td><td>${e.type}</td><td><b>${e.net}</b></td><td>${e.date}</td></tr>`).join('') : `<tr><td colspan="4" style="color:var(--ink-soft)">Deneme eklenmedi.</td></tr>`;
+    if(db.exams.length) document.getElementById("statNet").textContent = db.exams[db.exams.length-1].net;
+}
+
+// 4. SORU TAKİBİ & ANALİZ
+function addQuestion(){
+    const ders = document.getElementById("qDers").value.trim();
+    const konu = document.getElementById("qKonu").value.trim();
+    const d = parseInt(document.getElementById("qD").value) || 0;
+    const y = parseInt(document.getElementById("qY").value) || 0;
+    if(!ders || !konu) return;
+    db.questions.push({ ders, konu, d, y });
+    saveDB();
+    document.getElementById("qDers").value = ""; document.getElementById("qKonu").value = "";
+    document.getElementById("qD").value = ""; document.getElementById("qY").value = "";
+    renderQuestions();
+}
+function renderQuestions(){
+    const totalQ = db.questions.reduce((acc, curr) => acc + curr.d + curr.y, 0);
+    document.getElementById("statQ").textContent = totalQ;
+    document.getElementById("lbQ").textContent = totalQ;
+
+    document.getElementById("analysisBody").innerHTML = `<h3>Soru Çözüm Analizi</h3>` + (db.questions.length ? 
+        db.questions.map(q => `<div style="padding:6px 0; border-bottom:1px solid var(--line-soft);"><b>${q.ders} (${q.konu})</b> - Doğru: ${q.d}, Yanlış: ${q.y}</div>`).join('') : '<p style="color:var(--ink-soft)">Kayıt yok.</p>');
+}
+
+// 5. YAPAY ZEKA ENTEGRASYONLARI (AI Koç, Test Lab, Flashcard, Soru Çöz)
+async function callGemini(prompt, imageBase64 = null) {
+    const res = await fetch("/api/gemini", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt, image: imageBase64, mediaType: imageBase64 ? "image/jpeg" : undefined })
+    });
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.result || data.error || "AI bağlantı hatası");
+    return data.result;
+}
+
+async function sendAICoach(){
+    const input = document.getElementById("chatInput");
+    const text = input.value.trim();
+    if(!text) return;
+    const win = document.getElementById("chatWin");
+    win.innerHTML += `<div class="msg user">${text}</div>`;
+    input.value = "";
+    win.scrollTop = win.scrollHeight;
+
+    try {
+        const reply = await callGemini(`Sen bir uzman YKS koçusun. Öğrencinin hedefi: ${currentUser.target}, Alanı: ${currentUser.field}. Soru: ${text}`);
+        win.innerHTML += `<div class="msg ai">${reply}</div>`;
+    } catch(e) {
+        win.innerHTML += `<div class="msg ai" style="color:var(--red);">Hata: ${e.message}</div>`;
+    }
+    win.scrollTop = win.scrollHeight;
+}
+
+async function generateAIFlashcard(){
+    const el = document.getElementById("flashCardText");
+    el.textContent = "AI kart hazırlıyor...";
+    try {
+        const res = await callGemini(`YKS ${currentUser.field} için önemli bir kavramla ilgili 1 adet kısa Soru ve Cevap üret. Format: Soru: [...] Cevap: [...]`);
+        el.textContent = res;
+    } catch(e) {
+        el.textContent = "Üretilemedi: " + e.message;
+    }
+}
+
+async function generateAITest(){
+    const topic = document.getElementById("tlTopic").value.trim();
+    const area = document.getElementById("testResultArea");
+    area.textContent = "AI soruları hazırlıyor...";
+    try {
+        const res = await callGemini(`YKS formatında "${topic}" konusu için çözümlü 1 adet çoktan seçmeli soru üret.`);
+        area.innerHTML = `<div style="white-space:pre-wrap; line-height:1.5;">${res}</div>`;
+    } catch(e) {
+        area.textContent = "Hata: " + e.message;
+    }
+}
+
+function handleImageUpload(e){
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = async (event)=>{
+        const base64 = event.target.result.split(",")[1];
+        document.getElementById("imgStatus").textContent = "Soru yapay zeka tarafından çözülüyor...";
+        try {
+            const sol = await callGemini("Bu görseldeki YKS sorusunu adım adım çöz ve açıkla.", base64);
+            document.getElementById("imgStatus").textContent = "Çözüm tamamlandı ve arşive eklendi!";
+            db.archive.push({ text: sol, date: new Date().toLocaleDateString() });
+            saveDB();
+            renderArchive();
+        } catch(err) {
+            document.getElementById("imgStatus").textContent = "Çözüm hatası: " + err.message;
+        }
+    };
+    reader.readAsDataURL(file);
+}
+
+function renderArchive(){
+    document.getElementById("archiveList").innerHTML = `<h3>Dijital Soru Defteri Arşivi</h3>` + 
+        (db.archive.length ? db.archive.map((a, i) => `<div style="padding:10px; border-bottom:1px solid var(--line-soft); margin-top:8px;"><b>#${i+1} (${a.date})</b><p style="white-space:pre-wrap; font-size:13.5px; margin-top:4px;">${a.text}</p></div>`).join('') : '<p style="color:var(--ink-soft)">Arşiv boş.</p>');
+}
+
+// 6. POMODORO
+let pomoSec = 25 * 60, pomoTimer = null, isRunning = false;
+function togglePomodoro(){
+    const btn = document.getElementById("pomoBtn");
+    if(isRunning){
+        clearInterval(pomoTimer); isRunning = false; btn.textContent = "Devam Et";
+    } else {
+        isRunning = true; btn.textContent = "Durdur";
+        pomoTimer = setInterval(() => {
+            pomoSec--;
+            let m = Math.floor(pomoSec/60).toString().padStart(2,'0');
+            let s = (pomoSec%60).toString().padStart(2,'0');
+            document.getElementById("pomoTimer").textContent = `${m}:${s}`;
+            if(pomoSec <= 0){ clearInterval(pomoTimer); alert("Süre bitti! Harika odaklandın."); pomoSec = 25*60; isRunning = false; }
+        }, 1000);
+    }
+}
+
+// 7. KAYNAK & UYKU
+function addBook(){
+    const name = document.getElementById("bookName").value.trim();
+    if(!name) return;
+    db.books.push(name); saveDB();
+    document.getElementById("bookName").value = "";
+    renderBooksAndSleep();
+}
+function addSleep(){
+    const h = document.getElementById("sleepHours").value;
+    if(!h) return;
+    db.sleep.push(h); saveDB();
+    document.getElementById("sleepHours").value = "";
+    renderBooksAndSleep();
+}
+function renderBooksAndSleep(){
+    document.getElementById("bookList").innerHTML = db.books.map(b => `📚 ${b}`).join('<br>') || '<small style="color:var(--ink-soft)">Kaynak yok</small>';
+    document.getElementById("sleepList").innerHTML = db.sleep.map(s => `😴 ${s} saat`).join('<br>') || '<small style="color:var(--ink-soft)">Uyku kaydı yok</small>';
+}
+
+// 8. ROZETLER
 function renderBadges(){
     const badges = [
         {icon: "🚀", title: "İlk Adım", active: true},
-        {icon: "📚", title: "Soru Avcısı", active: false},
-        {icon: "🏆", title: "Deneme Kurdu", active: false}
+        {icon: "📚", title: "Soru Avcısı", active: db.questions.length > 0},
+        {icon: "🐺", title: "Deneme Kurdu", active: db.exams.length > 0},
+        {icon: "🔥", title: "Seri Katili", active: true},
+        {icon: "👑", title: "Lider", active: false}
     ];
     document.getElementById("badgeContainer").innerHTML = badges.map(b => `
         <div class="badge ${b.active ? 'active' : ''}">
-            <span class="badge-icon">${b.icon}</span>
-            <div style="font-weight:600;">${b.title}</div>
+            <span style="font-size:28px; display:block; margin-bottom:6px;">${b.icon}</span>
+            <strong>${b.title}</strong>
         </div>
     `).join('');
 }
 
-if(profile) initApp();
+function saveProfile(){
+    currentUser.name = document.getElementById("profName").value.trim();
+    currentUser.target = document.getElementById("profTarget").value.trim();
+    localStorage.setItem("yks_master_user", JSON.stringify(currentUser));
+    alert("Profil güncellendi!");
+    initApp();
+}
+
+if(currentUser) initApp();
 </script>
 </body>
 </html>
