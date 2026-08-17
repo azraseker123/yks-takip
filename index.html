@@ -1160,7 +1160,9 @@ function renderLicenseCard(){
   desc.textContent = pro
     ? "Tüm takip araçları ve tüm AI özellikleri (Flashcard AI, Test Lab, AI Koç, Soru Çöz) sınırsız açık."
     : "Takip araçları (konu, deneme, program, uyku, pomodoro, kaynak, liderlik vb.) sınırsız açık. AI özellikleri Pro Pakete özeldir.";
-/* --- AI KÖPRÜSÜ --- */
+window.requireProFeature = function() { return true; };
+window.localFlashcards = function(examType, ders, konu, n) { return []; };
+  /* --- AI KÖPRÜSÜ --- */
 window.requireProFeature = () => true; 
 
 // Butonları kendi kontrolümüze alıyoruz
