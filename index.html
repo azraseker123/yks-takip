@@ -1160,37 +1160,108 @@ function renderLicenseCard(){
   desc.textContent = pro
     ? "Tüm takip araçları ve tüm AI özellikleri (Flashcard AI, Test Lab, AI Koç, Soru Çöz) sınırsız açık."
     : "Takip araçları (konu, deneme, program, uyku, pomodoro, kaynak, liderlik vb.) sınırsız açık. AI özellikleri Pro Pakete özeldir.";
-// 1. ÇÖKME ENGELLEYİCİLER
-window.requireProFeature = () => true;
-window.localFlashcards = () => { console.log("AI Modu Hazır"); return []; };
+/* =========================================================================
+   GEMINI AI ENTEGRASYON VE ÇÖKME ENGELLEYİCİ KÖPRÜ (LINE 1163)
+   ========================================================================= */
 
-// 2. BUTON BAĞLAYICI (DOM Hazır olduğunda çalışır)
-document.addEventListener("DOMContentLoaded", () => {
-  const fcBtn = document.getElementById("fcGenAI");
-  const tlBtn = document.getElementById("tlStart");
+// 1. LİSANS VEYA EKSİK DENGELERDEN DOĞAN KONSOL HATALARINI ENGELLER
+window.requireProFeature = function() { return true; };
+window.localFlashcards = function(examType, ders, konu, n) { return []; };
 
+// 2. FLASHCARD UYGULAMA ENTEGRASYONU (state.customCards + renderFlashcard)
+async function runAIFlashcardGen() {
+  const examType = document.getElementById("fcExamType")?.value || "TYT";
+  const ders = document.getElementById("fcDers")?.value || "Genel";
+  const konu = document.getElementById("fcKonu")?.value || "Genel";
+  const key = `${examType}|${ders}|${konu}`;
+  
+  const btn = document.getElementById("fcGenAI");
+  if (!btn) return;
+  const oldText = btn.textContent;
+  btn.textContent = "🤖 AI Üretiyor...";
+  btn.disabled = true;
+
+  try {
+    const cards = await generateFlashcards(ders, konu);
+    if (!state.customCards[key]) state.customCards[key] = [];
+    
+    // Uygulama formatına uygun veri eşlemesi
+    const formatted = cards.map(c => ({
+      q: c.q || c.question || "Soru",
+      a: c.a || c.answer || "Cevap"
+    }));
+
+    state.customCards[key].push(...formatted);
+    if (typeof save === "function") save();
+    if (typeof renderFlashcard === "function") renderFlashcard();
+  } catch (err) {
+    alert("AI Kart Üretim Hatası: " + (err.message || "API bağlantısı kurulamadı."));
+  } finally {
+    btn.textContent = oldText;
+    btn.disabled = false;
+  }
+}
+
+// 3. TEST LAB ENTEGRASYONU (renderTestRunner Bağlantısı)
+async function runAITestLabGen() {
+  const examType = document.getElementById("tlExamType")?.value || "TYT";
+  const ders = document.getElementById("tlDers")?.value || "Genel";
+  const konu = document.getElementById("tlKonu")?.value || "Genel";
+  const runner = document.getElementById("testlabRunner");
+
+  if (runner) {
+    runner.innerHTML = `<div class="card pad empty">🤖 Gemini AI 10 adet özgün YKS sorusu hazırlıyor, lütfen bekleyin…</div>`;
+  }
+
+  try {
+    const questions = await generateTest(ders, konu);
+    
+    // Gelen JSON verisini Test Lab runner formatına uyarlama
+    const formattedQuestions = questions.map(q => {
+      let secenekler = {};
+      if (Array.isArray(q.options)) {
+        const letters = ["A", "B", "C", "D", "E"];
+        q.options.forEach((opt, idx) => {
+          if (idx < 5) secenekler[letters[idx]] = opt;
+        });
+      } else {
+        secenekler = q.secenekler || q.options || {};
+      }
+
+      return {
+        soru: q.question || q.soru || "Soru metni yüklenemedi",
+        secenekler: secenekler,
+        dogru: (q.answer || q.dogru || "A").charAt(0),
+        cozum: q.explanation || q.cozum || "Detaylı çözüm mevcut değil."
+      };
+    });
+
+    if (typeof renderTestRunner === "function") {
+      renderTestRunner(formattedQuestions, { examType, ders, konu }, false, null);
+    }
+  } catch (err) {
+    if (runner) runner.innerHTML = `<div class="card pad empty" style="color:var(--red);">Hata: ${err.message || "Test üretilemedi."}</div>`;
+  }
+}
+
+// 4. ALT SATIRLARDAKİ ORİJİNAL TETİKLEYİCİLERİ OVERRIDE ETME
+window.generateTestLab = runAITestLabGen;
+
+document.addEventListener("click", function(e) {
+  const fcBtn = e.target.closest("#fcGenAI");
   if (fcBtn) {
-    fcBtn.onclick = async (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const ders = document.getElementById("fcDers")?.value || "Genel";
-      const konu = document.getElementById("fcKonu")?.value || "Genel";
-      alert("🤖 Gemini AI kartları hazırlıyor...");
-      if (typeof generateFlashcards === 'function') await generateFlashcards(ders, konu);
-    };
+    e.preventDefault();
+    e.stopPropagation();
+    runAIFlashcardGen();
   }
 
+  const tlBtn = e.target.closest("#tlStart");
   if (tlBtn) {
-    tlBtn.onclick = async (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      const ders = document.getElementById("tlDers")?.value || "Genel";
-      const konu = document.getElementById("tlKonu")?.value || "Genel";
-      alert("🤖 Gemini AI test sorularını hazırlıyor...");
-      if (typeof generateTest === 'function') await generateTest(ders, konu);
-    };
+    e.preventDefault();
+    e.stopPropagation();
+    runAITestLabGen();
   }
-});
+}, true); // "true" (capture phase) sayesinde alt satırlardaki listener'lardan önce biz yakalarız
 async function startTest(ders, konu) {
   const container = document.getElementById("testQuestionsContainer") || document.getElementById("testContainer");
   if (container) container.innerHTML = "<div style='text-align:center; padding:20px;'>🤖 AI 10 adet özgün YKS sorusu hazırlıyor, lütfen bekleyin...</div>";
