@@ -1025,7 +1025,12 @@ const BADGE_DEFS = [
 // messages/system) — Gemini'nin generateContent biçimine çevirme işi artık
 // /api/gemini.js içinde, sunucu tarafında yapılır; bu sayede geri kalan uygulama
 // kodu (flashcard/test/soru çöz/koç çağrıları) hiç değişmeden çalışmaya devam eder.
+window.requireProFeature = function() { return true; };
+window.localFlashcards = function() { return []; };
+
 async function callClaudeAPI(body, {retries=1, timeoutMs=8000} = {}) {
+// ...
+  async function callClaudeAPI(body, {retries=1, timeoutMs=8000} = {}) {
   let lastErr = null;
   let promptText = "";
 
